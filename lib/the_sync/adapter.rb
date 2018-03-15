@@ -1,6 +1,7 @@
 class TheSync::Adapter
   extend ActiveSupport::Autoload
   autoload :MysqlAdapter
+  attr_reader :client
   
   class << self
     def lookup(name)
@@ -8,7 +9,7 @@ class TheSync::Adapter
     end
   end
   
-  def initialize(adapter, table = nil, options = {})
+  def initialize(adapter, options = {})
     adapter_class = self.class.lookup(adapter)
     @client = adapter_class.new(options)
     

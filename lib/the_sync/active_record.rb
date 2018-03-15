@@ -13,8 +13,7 @@ module TheSync::ActiveRecord
     @source_table = options[:source_table]
     
     _options = TheSync.options[options[:source]]
-    binding.pry
-    @source_client = TheSync::Adapter.new(_options[:adapter])
+    @source_client = TheSync::Adapter.new(_options[:adapter]).client
     extend TheSync::Table
   end
   

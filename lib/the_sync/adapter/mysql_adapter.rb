@@ -2,7 +2,7 @@ require 'mysql2'
 require 'arel'
 
 class TheSync::Adapter
-    class MysqlAdapter
+  class MysqlAdapter < Adapter
       
       def initialize(options = {})
         options.merge(database_timezone: :local, application_timezone: :local)
@@ -130,5 +130,5 @@ class TheSync::Adapter
         sql
       end
       
-   end
+  end
 end
