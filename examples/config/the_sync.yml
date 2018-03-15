@@ -1,0 +1,28 @@
+default:
+  from:
+    adapter: mysql
+    host: localhost
+    port: 3306
+    username: root
+    password: root
+  to:
+    adapter: mysql
+    host: localhost
+    port: 3306
+    username: root
+    password: root
+  map:
+    users: [['id', 'id_2name']]
+  ignore_columns:
+    users: ['updated_at']
+
+staging:
+  <<: &default
+
+test:
+  <<: &default
+
+production:
+  <<: &default
+
+
