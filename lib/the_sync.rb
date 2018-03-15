@@ -7,7 +7,7 @@ module TheSync
   
 
   def self.options
-    @options ||= Rails.application.config_for('the_sync')
+    @options ||= Rails.application.config_for('the_sync').with_indifferent_access
   end
 
 end

@@ -2,7 +2,7 @@ require 'sql_sync/schema'
 require 'mysql2'
 require 'pry'
 
-class TheSync::Table
+module TheSync::Table
   
   def initialize(from, to, table)
   

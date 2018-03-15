@@ -1,14 +1,22 @@
+require 'the_sync/adapter'
 module TheSync::ActiveRecord
   
-  
+  # source
+  # source_client
+  # source_table
   def acts_as_sync(options = {})
   
     
     
     # 'source.table_name'
-    @view_name = options[:source] + '.' + self.table_name
+    @view_name = options[:source].to_s + '.' + self.table_name
     @source_table = options[:source_table]
-   end
+    
+    _options = TheSync.options[options[:source]]
+    binding.pry
+    @source_client = TheSync::Adapter.new(_options[:adapter])
+    extend TheSync::Table
+  end
   
   
   def migrate_sync

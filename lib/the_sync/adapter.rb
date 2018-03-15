@@ -1,13 +1,18 @@
-module TheSync::Adapter
-
-  def initialize(host, table = nil)
-
-    adapter_class = SqlSync.config['adapter'].upcase
-    @client = adapter_class.new
-
-    @from = adapter.new(SqlSync.config['from'])
-
-    ObjectSpace.define_finalizer(self, self.class.method(:finalize))
+class TheSync::Adapter
+  extend ActiveSupport::Autoload
+  autoload :MysqlAdapter
+  
+  class << self
+    def lookup(name)
+      const_get(name.to_s.camelize << 'Adapter')
+    end
+  end
+  
+  def initialize(adapter, table = nil, options = {})
+    adapter_class = self.class.lookup(adapter)
+    @client = adapter_class.new(options)
+    
+    #ObjectSpace.define_finalizer(self, self.class.method(:finalize))
   end
 
   def execute(sql)
