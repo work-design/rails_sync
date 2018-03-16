@@ -37,9 +37,19 @@ module TheSync::ActiveRecord
   
   end
   
-  def create_view(start: 0, finish: start + 1000)
+  def create_temp_table
+    sql = "CREATE TEMPORARY TABLE #{@view_name} ("
+    sql << sql_table(only: @source_columns)
+    sql << ")"
+    sql << "ENGINE=FEDERATED"
+    sql << "CONNECTION='#{@server_name}/#{@source_table}'"
+    
+    connection.exec(sql)
+  end
+  
+  def select_view(start: 0, finish: start + 1000)
     sql = <<~HEREDOC
-      CREATE TABLE #{@view_name} ENGINE=MEMORY \
+      CREATE TEMPORARY TABLE #{@view_name} \
       SELECT #{@source_columns.join(',')} \
       FROM #{@source_table} \
       WHERE #{@source_pk} >= #{start} AND #{@source_pk} <= #{finish}
@@ -56,9 +66,8 @@ module TheSync::ActiveRecord
     execute(query.to_sql).each
   end
   
-  
-end
 
+end
 
 
 ActiveSupport.on_load :active_record do
