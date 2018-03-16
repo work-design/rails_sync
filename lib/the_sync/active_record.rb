@@ -1,4 +1,5 @@
 require 'the_sync/adapter'
+require 'the_sync/table'
 module TheSync::ActiveRecord
   
   # source
@@ -12,8 +13,7 @@ module TheSync::ActiveRecord
     @view_name = options[:source].to_s + '.' + self.table_name
     @source_table = options[:source_table]
     
-    _options = TheSync.options[options[:source]]
-    @source_client = TheSync::Adapter.new(_options[:adapter]).client
+    @adapter = TheSync::Adapter.adapter(options[:source])
     extend TheSync::Table
   end
   
