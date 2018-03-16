@@ -1,19 +1,34 @@
 require 'the_sync/adapter'
 require 'the_sync/table'
 module TheSync::ActiveRecord
-  
+  attr_reader :adapter
   # source
   # source_client
   # source_table
   def acts_as_sync(options = {})
   
     
+    _mappings = options[:mapping].to_h
+    
+    if options[:only]
+      _filter_columns = self.column_names & Array(options[:only])
+    else
+      _filter_columns = self.column_names - Array(options[:except])
+    end
     
     # 'source.table_name'
     @view_name = options[:source].to_s + '.' + self.table_name
+    
+    
     @source_table = options[:source_table]
+    @source_columns = _filter_columns.map { |column_name|
+      _mappings.key?(column_name) ? _mappings[column_name] : column_name
+    }
     
     @adapter = TheSync::Adapter.adapter(options[:source])
+    
+    @source_pk = 'id'
+    
     extend TheSync::Table
   end
   
@@ -22,9 +37,16 @@ module TheSync::ActiveRecord
   
   end
   
-  def create_view
-    "CREATE VIEW #{@view_name} AS"
-  
+  def create_view(start: 0, finish: start + 1000)
+    sql = <<~HEREDOC
+      CREATE TABLE #{@view_name} ENGINE=MEMORY \
+      SELECT #{@source_columns.join(',')} \
+      FROM #{@source_table} \
+      WHERE #{@source_pk} >= #{start} AND #{@source_pk} <= #{finish}
+      ORDER BY #{@source_pk} ASC
+    HEREDOC
+    
+    @adapter.client.query(sql)
   end
   
   def source_select
@@ -32,11 +54,6 @@ module TheSync::ActiveRecord
     query = query.where table[primary_key].in(ids)
   
     execute(query.to_sql).each
-  end
-  
-  def view_name
-    
-    "#{source}"
   end
   
   
