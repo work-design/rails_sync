@@ -2,6 +2,7 @@ require 'arel'
 module TheSync::Adapter
   class Base
     attr_reader :client
+    attr_reader :connection
     
     def initialize(adapter, options = {})
       _options = TheSync.options[adapter]

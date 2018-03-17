@@ -9,15 +9,19 @@ module TheSync
     end
     
     def self.adapter(adapter, options = {})
-      _options = TheSync.options[adapter]
-      adapter_class = lookup(_options[:adapter])
-      @client = adapter_class.new(_options)
-      
+      @adapter_options = TheSync.options.fetch(adapter, {})
+      adapter_class = lookup(@adapter_options[:adapter])
+      @client = adapter_class.new(@adapter_options)
+  
       #ObjectSpace.define_finalizer(self, self.class.method(:finalize))
     end
     
     def self.client
       adapter.client
+    end
+    
+    def self.connection
+      adapter.connection
     end
     
   end

@@ -17,14 +17,16 @@ module TheSync::ActiveRecord
     end
     
     # 'source.table_name'
-    @view_name = options[:source].to_s + '.' + self.table_name
+    @view_name = options[:source].to_s + '_' + self.table_name
     
     
     @source_table = options[:source_table]
     @source_columns = _filter_columns.map { |column_name|
       _mappings.key?(column_name) ? _mappings[column_name] : column_name
     }
-    
+
+
+
     @adapter = TheSync::Adapter.adapter(options[:source])
     
     @source_pk = 'id'
@@ -38,13 +40,13 @@ module TheSync::ActiveRecord
   end
   
   def create_temp_table
-    sql = "CREATE TEMPORARY TABLE #{@view_name} ("
+    sql = "CREATE TABLE #{@view_name} (\n"
     sql << sql_table(only: @source_columns)
     sql << ")"
-    sql << "ENGINE=FEDERATED"
-    sql << "CONNECTION='#{@server_name}/#{@source_table}'"
+    sql << "ENGINE=FEDERATED\n"
+    sql << "CONNECTION='#{adapter.connection}/#{@source_table}';"
     
-    connection.exec(sql)
+    connection.execute(sql)
   end
   
   def select_view(start: 0, finish: start + 1000)

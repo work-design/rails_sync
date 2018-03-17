@@ -2,10 +2,11 @@ require 'mysql2'
 
 module TheSync::Adapter
   class Mysql < Base
-      
+    
     def initialize(options = {})
       options.merge(database_timezone: :local, application_timezone: :local)
       @client = Mysql2::Client.new(options)
+      @connection = "mysql://#{options[:username]}:#{options[:password]}@#{options[:host]}:#{options[:port]}/#{options[:database]}"
     end
   
     def primary_key
