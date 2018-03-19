@@ -16,6 +16,7 @@ module TheSync::Analyze
     analyze_diffs.each do |diff|
       audit = SyncAudit.new synchro_type: self.name
       audit.synchro_id = diff.delete('id')&.first
+      audit.action = 'update'
       audit.audited_changes = diff
       audit.save
     end

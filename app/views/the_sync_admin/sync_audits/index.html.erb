@@ -8,23 +8,30 @@
     <%= render 'search_form' %>
   </div>
 
-  <div class="ui segment top attached">
-    <%= link_to 'New Sync Audit', new_sync_audit_path, class: 'ui teal button' %>
-  </div>
-
   <table class="ui bottom attached table">
     <thead>
-    <tr>
-        </tr>
+      <tr>
+        <th><%= SyncAudit.human_attribute_name(:id) %></th>
+        <th><%= SyncAudit.human_attribute_name(:synchro_type) %></th>
+        <th><%= SyncAudit.human_attribute_name(:synchro_id) %></th>
+        <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
+        <th><%= SyncAudit.human_attribute_name(:state) %></th>
+        <th>Actions</th>
+      </tr>
     </thead>
 
     <tbody>
     <% @sync_audits.each do |sync_audit| %>
       <tr>
+        <td><%= sync_audit.id %></td>
+        <td><%= sync_audit.synchro_type %></td>
+        <td><%= sync_audit.synchro_id %></td>
+        <td><%= simple_format_hash sync_audit.audited_changes %></td>
+        <td><%= sync_audit.state_i18n %></td>
         <td>
-          <%= link_to 'Show', sync_audit_path(sync_audit), class: 'ui blue label' %>
-          <%= link_to 'Edit', edit_sync_audit_path(sync_audit), class: 'ui pink label' %>
-          <%= link_to 'Destroy', sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
+          <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
+          <%= link_to 'Show', admin_sync_audit_path(sync_audit), class: 'ui blue label' %>
+          <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
         </td>
       </tr>
     <% end %>

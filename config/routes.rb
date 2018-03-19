@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   scope :admin, as: 'admin', module: 'the_sync_admin' do
-    resources :sync_audits
+    resources :sync_audits do
+      patch :apply, on: :member
+    end
   end
 
 end
