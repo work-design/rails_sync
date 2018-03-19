@@ -14,6 +14,7 @@
         <th><%= SyncAudit.human_attribute_name(:id) %></th>
         <th><%= SyncAudit.human_attribute_name(:synchro_type) %></th>
         <th><%= SyncAudit.human_attribute_name(:synchro_id) %></th>
+        <th><%= SyncAudit.human_attribute_name(:action) %></th>
         <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
         <th><%= SyncAudit.human_attribute_name(:state) %></th>
         <th>Actions</th>
@@ -26,6 +27,7 @@
         <td><%= sync_audit.id %></td>
         <td><%= sync_audit.synchro_type %></td>
         <td><%= sync_audit.synchro_id %></td>
+        <td><%= sync_audit.action_i18n %></td>
         <td><%= simple_format_hash sync_audit.audited_changes %></td>
         <td><%= sync_audit.state_i18n %></td>
         <td>

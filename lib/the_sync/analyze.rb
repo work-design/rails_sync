@@ -1,7 +1,8 @@
 module TheSync::Analyze
 
-  def analyze_diffs
-    results = connection.execute(fetch_diffs)
+  def analyze_diffs(type = 'update')
+    sql = fetch_diffs(type)
+    results = connection.execute(sql)
     fields = results.fields.in_groups(2).first
     arr_value = results.map do |result|
       r = result.in_groups(2)
@@ -12,33 +13,29 @@ module TheSync::Analyze
     #hash_value = .zip(arr_value)
   end
 
-  def cache_diffs
-    analyze_diffs.each do |diff|
+  def cache_diffs(type = 'update')
+    analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: self.name
-      audit.synchro_id = diff.delete('id')&.first
-      audit.action = 'update'
+      audit.synchro_id = diff.delete('id').first
+      audit.action = type
       audit.audited_changes = diff
       audit.save
     end
   end
 
-  def fetch_diffs
-    query = analyze_table.join(dest_arel_table).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
-    query.where(analyze_conditions)
-
-    query.to_sql
-  end
-
-  def fetch_inserts
-    query = analyze_table.join(dest_arel_table, Arel::Nodes::RightOuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
-    query.where(my_arel_table[primary_key].eq(nil))
-
-    query.to_sql
-  end
-
-  def fetch_deletes
-    query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
-    query.where(dest_arel_table[@dest_pk].eq(nil))
+  def fetch_diffs(type = 'update')
+    if type == 'update'
+      query = analyze_table.join(dest_arel_table).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+      query.where(analyze_conditions)
+    elsif type == 'insert'
+      query = analyze_table.join(dest_arel_table, Arel::Nodes::RightOuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+      query.where(my_arel_table[primary_key].eq(nil))
+    elsif type == 'delete'
+      query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+      query.where(dest_arel_table[@dest_pk].eq(nil))
+    else
+      query = analyze_table.join(dest_arel_table, Arel::Nodes::FullOuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+    end
 
     query.to_sql
   end
