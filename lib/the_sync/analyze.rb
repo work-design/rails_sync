@@ -6,10 +6,19 @@ module TheSync::Analyze
     arr_value = results.map do |result|
       r = result.in_groups(2)
       hash_value = fields.zip( r[0].zip(r[1]) ).to_h
-      hash_value.reject { |_, v| v[0] == v[1] }
+      hash_value.select { |key, v| v[0] != v[1] || key == primary_key  }
     end
     arr_value
     #hash_value = .zip(arr_value)
+  end
+
+  def cache_diffs
+    analyze_diffs.each do |diff|
+      audit = SyncAudit.new synchro_type: self.name
+      audit.synchro_id = diff.delete('id')&.first
+      audit.audited_changes = diff
+      audit.save
+    end
   end
 
   def fetch_diffs
