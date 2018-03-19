@@ -32,8 +32,8 @@ module TheSync::ActiveRecord
     }.compact
     @dest_pk = _mappings.key?(self.primary_key) ? _mappings[self.primary_key] : primary_key
 
-    @my_columns = @full_mappings.map { |col| col[0] } + [primary_key]
-    @dest_columns = @full_mappings.map { |col| col[1] } + [@dest_pk]
+    @my_columns = [primary_key] + @full_mappings.map { |col| col[0] }
+    @dest_columns = [@dest_pk] + @full_mappings.map { |col| col[1] }
 
     @adapter = TheSync::Adapter.adapter(options[:dest])
 
