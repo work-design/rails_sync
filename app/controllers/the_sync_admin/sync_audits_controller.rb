@@ -2,7 +2,12 @@ class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
   before_action :set_sync_audit, only: [:show, :apply, :destroy]
 
   def index
-    @sync_audits = SyncAudit.page(params[:page])
+    q_params = params.permit(:synchro_type)
+    @sync_audits = SyncAudit.default_where(q_params).page(params[:page])
+  end
+
+  def synchros
+    @synchro_types = TheSync.synchro_types
   end
 
   def show

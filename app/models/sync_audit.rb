@@ -47,5 +47,8 @@ class SyncAudit < ApplicationRecord
     end
   end
 
+  def self.synchro_types
+    SyncAudit.select(:synchro_type).distinct.pluck(:synchro_type)
+  end
 
 end

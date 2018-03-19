@@ -37,6 +37,8 @@ module TheSync::ActiveRecord
 
     @adapter = TheSync::Adapter.adapter(options[:dest])
 
+    TheSync.synchro_types << self
+
     extend TheSync::Table
     extend TheSync::Analyze
   end
