@@ -4,10 +4,14 @@ class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
   def index
     q_params = params.permit(:synchro_type)
     @sync_audits = SyncAudit.default_where(q_params).page(params[:page])
+    @synchro_types = TheSync.synchro_types | SyncAudit.synchro_types
   end
 
-  def synchros
-    @synchro_types = TheSync.synchro_types
+  def sync
+    @synchro_model = params[:synchro_type].constantize
+    @synchro_model.cache_all_diffs
+
+    redirect_to admin_sync_audits_url, notice: 'Sync Run successfully '
   end
 
   def show
@@ -15,7 +19,7 @@ class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
 
   def apply
     @sync_audit.apply_changes
-    redirect_to admin_sync_audits_url, notice: 'Sync audit was successfully destroyed.'
+    redirect_to admin_sync_audits_url, notice: 'Sync audit was successfully applied.'
   end
 
   def destroy

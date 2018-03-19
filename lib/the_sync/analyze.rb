@@ -13,6 +13,12 @@ module TheSync::Analyze
     #hash_value = .zip(arr_value)
   end
 
+  def cache_all_diffs
+    ['update', 'insert', 'delete'].each do |action|
+      cache_diffs(action)
+    end
+  end
+
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: self.name

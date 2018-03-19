@@ -22,9 +22,9 @@
     </thead>
 
     <tbody>
-    <% @sync_audits.each do |sync_audit| %>
+    <% @sync_types.each do |sync_type| %>
       <tr>
-        <td><%= sync_audit.id %></td>
+        <td><%= sync_type %></td>
         <td><%= sync_audit.synchro_type %></td>
         <td><%= sync_audit.synchro_id %></td>
         <td><%= sync_audit.action_i18n %></td>
