@@ -4,9 +4,7 @@ module TheSync
   include ActiveSupport::Configurable
 
   configure do |config|
-    config.xx = ''
-
-
+    config.admin_class = 'Admin::BaseController'
   end
 
 end

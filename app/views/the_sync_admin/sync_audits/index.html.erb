@@ -1,0 +1,37 @@
+<div>
+
+  <div class="ui top attached menu borderless">
+    <div class="header item">Sync Audits</div>
+  </div>
+
+  <div class="ui segment bottom attached">
+    <%= render 'search_form' %>
+  </div>
+
+  <div class="ui segment top attached">
+    <%= link_to 'New Sync Audit', new_sync_audit_path, class: 'ui teal button' %>
+  </div>
+
+  <table class="ui bottom attached table">
+    <thead>
+    <tr>
+        </tr>
+    </thead>
+
+    <tbody>
+    <% @sync_audits.each do |sync_audit| %>
+      <tr>
+        <td>
+          <%= link_to 'Show', sync_audit_path(sync_audit), class: 'ui blue label' %>
+          <%= link_to 'Edit', edit_sync_audit_path(sync_audit), class: 'ui pink label' %>
+          <%= link_to 'Destroy', sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @sync_audits %>
+</div>
+
+
