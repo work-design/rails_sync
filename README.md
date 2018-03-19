@@ -1,50 +1,24 @@
 # TheSync
 
-This tools allow sync one way two tables one the moment, dont use BINLOG, compare
-every row beetwen tables with MD5 algorithm to search changes, before create DML
-sentences to equal same tables.
-
-- Did not use BINLOG.
-- Don't need SUPER PRIVILEGES.
+* [English](./README.en.md)
 
 
-## Usage
+## 适用场景
+1. 应用之间同步数据；
+2. 两个 `table` 字段名称可能不同；
+3. 两个 `table` 基于唯一的id进行同步数据，id可能是主键，也可能不是；
 
+## 特性
+1. 绝对靠谱，不依赖binlog，基于id对两个表的各个字段进行比较，找出字段值的变化，新增的记录，删除的记录；
+2. 高性能，10万以内的计算毫秒级；
+3. 兼容性强，可支持各个关系型数据库（依赖 linked DB, mysql FEDERATED引擎等）；
+4. 安全，对数据的改变先记录而不应用改变，可基于记录人工决定是否应用该改变，或者revert相应的改动；
+5. 实时性强，可以通过应用里的数据改变动作触发；
+ 
+## 实现原理
+1. 建立临时表，映射远程数据库节点中的对应表（只映射需要比较改变值的字段），在mysql中采用`FEDERATED`引擎；
+2. 通过 inner_join 计算两张表不一样的字段；
+3. 通过 left_join 找出左表多出的记录；
+4. 通过 right_join 找出右表多出的记录； 
 
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'the_sync'
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install the_sync
-```
-
-## Warning
-* Source table and destined table must have same Primary Key value, `the_sync` use primary key to as ID.
-
-
-## Contributing
-Bug report or pull request are welcome.
-
-### Make a pull request
-1. Fork it
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create new Pull Request
-### Please write unit test with your code if necessary.
-
-## License
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## reference
-* [mysqlsync](https://github.com/swapbyt3s/mysqlsync), The tool gives me inspiration, thanks!
+##
