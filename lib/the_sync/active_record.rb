@@ -58,7 +58,7 @@ module TheSync::ActiveRecord
 
   def select_view(start: 0, finish: start + 1000)
     sql = <<~HEREDOC
-      CREATE TEMPORARY TABLE #{@view_name} \
+      CREATE VIEW #{@view_name} \
       SELECT #{@dest_columns.join(',')} \
       FROM #{@dest_table} \
       WHERE #{@dest_pk} >= #{start} AND #{@dest_pk} <= #{finish}

@@ -8,13 +8,15 @@ module TheSync::Analyze
   end
 
   def analyze_inserts
-    query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+    query = analyze_table.join(dest_arel_table, Arel::Nodes::RightOuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+    query.where(my_arel_table[primary_key].eq(nil))
 
     results = connection.execute(query.to_sql)
   end
 
   def analyze_deletes
-    query = analyze_table.join(dest_arel_table, Arel::Nodes::RightOuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+    query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin).on(my_arel_table[primary_key].eq(dest_arel_table[@dest_pk]))
+    query.where(dest_arel_table[@dest_pk].eq(nil))
 
     results = connection.execute(query.to_sql)
   end
