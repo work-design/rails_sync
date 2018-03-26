@@ -5,20 +5,67 @@ module TheSync
       @adapter.columns(@dest_table)
     end
 
-    def sql_table(table, only: [], except: [])
+    def dest_indexes
+      @adapter.indexes(@dest_table)
+    end
 
-      column  = alter[0]
-      type    = alter[1]
-      default = value(alter[3], alter[0])
-      action  = (right.any? {|i| i.first == alter.first})? ' MODIFY' : ' ADD'
-      notnull = (alter[2] == 'NO')? ' NOT NULL' : ' NULL'
-      default = (!alter[3].nil?)? " DEFAULT #{default}" : ''
-      extra   = (!alter[4].empty?)? " #{alter[4]}" : ''
-      index   = left.each_index.select{|i| left[i] == alter}.first
-      after   = left[((index > 0)? index - 1 : 0)].first
-      after   = (index > 0)? " AFTER #{after}" : ' FIRST'
+    def dest_primary_key
+      results = @adapter.primary_key(@dest_table)
+      Hash(results[0])['COLUMN_NAME']
+    end
 
-      sql = "ALTER TABLE #{table_path} #{action} COLUMN #{column} #{type} #{notnull} #{default} #{extra} #{after};"
+    def dest_sql_table(only: [], except: [], pure: true)
+      if only.size > 0
+        _columns = dest_columns.select { |column| only.include?(column['COLUMN_NAME']) }
+      else
+        _columns = dest_columns.reject { |column| except.include?(column['COLUMN_NAME']) }
+      end
+
+      if pure
+        sql = ""
+      else
+        sql = "CREATE TABLE `#{@dest_table}` (\n"
+      end
+
+      _columns.each do |column|
+        sql << "  `#{column['COLUMN_NAME']}` #{column['COLUMN_TYPE']}"
+        sql << " COLLATE #{column['COLLATION_NAME']}" if column['COLLATION_NAME'].present?
+        sql << " NOT NULL" if column['IS_NULLABLE'] == 'NO'
+        if column['COLUMN_DEFAULT']
+          sql << " DEFAULT '#{column['COLUMN_DEFAULT']}',\n"
+        elsif column['COLUMN_DEFAULT'].nil? && column['IS_NULLABLE'] == 'YES'
+          sql << " DEFAULT NULL,\n"
+        else
+          sql << ",\n"
+        end
+      end
+
+      sql << "  PRIMARY KEY (`#{dest_primary_key}`)"
+
+      _indexes = dest_indexes.reject { |index| index['INDEX_NAME'] == 'PRIMARY' }
+      _indexes = dest_indexes.reject { |index| (Array(index['COLUMN_NAME']) & _columns.map { |col| col['COLUMN_NAME'] }).blank? }
+
+      if _indexes.present?
+        sql << ",\n"
+      else
+        sql << "\n"
+      end
+      _indexes.each_with_index do |index, position|
+        sql << "  KEY `#{index['INDEX_NAME']}` ("
+        sql << "`#{index['COLUMN_NAME']}`"
+
+        if position + 1 == _indexes.size
+          sql << ")\n"
+        else
+          sql << "),\n"
+        end
+      end
+
+      if pure
+        sql
+      else
+        sql << ")"
+      end
     end
 
     def checksum

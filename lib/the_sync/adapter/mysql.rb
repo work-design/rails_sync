@@ -61,10 +61,19 @@ module TheSync::Adapter
       execute(query.to_sql)
     end
 
-    def primary_key(table)
+    def primary_key(table_path)
       _table = Arel::Table.new 'information_schema.COLUMNS'
       query = _table.project(_table['COLUMN_NAME'])
-      query = query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table)).and(_table['COLUMN_KEY'].eq('PRI')))
+      query = query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table_path)).and(_table['COLUMN_KEY'].eq('PRI')))
+
+      execute(query.to_sql)
+    end
+
+    def indexes(table_path)
+      _table = Arel::Table.new 'information_schema.STATISTICS'
+      query = _table.project(_table['INDEX_NAME'],
+                             _table['COLUMN_NAME'])
+      query =query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table_path)).and(_table['INDEX_NAME'].not_eq('PRIMARY')))
 
       execute(query.to_sql)
     end

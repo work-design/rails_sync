@@ -50,7 +50,7 @@ module TheSync::ActiveRecord
 
   def create_temp_table
     sql = "CREATE TABLE #{@view_name} (\n"
-    sql << sql_table(only: @dest_columns)
+    sql << dest_sql_table(only: @dest_columns)
     sql << ")"
     sql << "ENGINE=FEDERATED\n"
     sql << "CONNECTION='#{adapter.connection}/#{@dest_table}';"
