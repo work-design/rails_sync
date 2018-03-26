@@ -1,6 +1,7 @@
 <div class="ui top attached segment">
   <% if params[:synchro_type] %>
     <%= link_to 'Sync', sync_admin_sync_audits_path(synchro_type: params[:synchro_type]), method: :post, class: 'ui blue button' %>
+    <%= link_to 'Batch Apply', batch_admin_sync_audits_path(synchro_type: params[:synchro_type]), method: :post, class: 'ui yellow button' %>
   <% end %>
 </div>
 

@@ -4,12 +4,18 @@
   </div>
 <% end %>
 
-<div>
+<p>
   <span>Synchro Type:</span>
   <%= link_to 'All', filter_params(except: [:synchro_type]), class: active_params(synchro_type: '', active_class: 'ui basic blue button', item_class: 'ui basic white button') %>
   <% @synchro_types.each do |synchro_type| %>
     <%= link_to SyncAudit.enum_i18n(:synchro_type, synchro_type), filter_params(synchro_type: synchro_type), class: active_params(synchro_type: synchro_type, active_class: 'ui basic blue button', item_class: 'ui basic white button') %>
   <% end %>
-</div>
+</p>
 
-
+<p>
+  <span>State:</span>
+  <%= link_to 'All', filter_params(except: [:state]), class: active_params(state: '', active_class: 'ui basic blue button', item_class: 'ui basic white button') %>
+  <% ['init', 'applied'].each do |state| %>
+    <%= link_to SyncAudit.enum_i18n(:state, state), filter_params(state: state), class: active_params(state: state, active_class: 'ui basic blue button', item_class: 'ui basic white button') %>
+  <% end %>
+</p>

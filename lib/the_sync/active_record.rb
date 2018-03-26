@@ -43,7 +43,6 @@ module TheSync::ActiveRecord
     extend TheSync::Analyze
   end
 
-
   def migrate_sync
 
   end

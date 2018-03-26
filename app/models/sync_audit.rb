@@ -52,4 +52,10 @@ class SyncAudit < ApplicationRecord
     SyncAudit.select(:synchro_type).distinct.pluck(:synchro_type)
   end
 
+  def self.synchro_apply(type, action: ['update', 'delete', 'insert'])
+    SyncAudit.where(synchro_type: type, action: action).find_each do |sync_audit|
+      sync_audit.apply_changes
+    end
+  end
+
 end
