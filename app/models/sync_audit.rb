@@ -33,7 +33,8 @@ class SyncAudit < ApplicationRecord
       end
     elsif self.action_insert?
       synchro_model = self.synchro_type.constantize
-      _synchro = synchro_model.new.assign_attributes to_apply_params
+      _synchro = synchro_model.find_or_initialize_by(id: self.synchro_id)
+      _synchro.assign_attributes to_apply_params
       self.class.transaction do
         _synchro.save!
         self.update! state: 'applied'

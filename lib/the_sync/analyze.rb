@@ -22,7 +22,7 @@ module TheSync::Analyze
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: self.name
-      audit.synchro_id = diff.delete('id').first
+      audit.synchro_id = diff.delete('id').compact.first
       audit.action = type
       audit.audited_changes = diff
       audit.save
