@@ -32,7 +32,9 @@
         <td><%= simple_format_hash sync_audit.audited_changes %></td>
         <td><%= sync_audit.state_i18n %></td>
         <td>
-          <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
+          <% unless sync_audit.applied? %>
+            <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
+          <% end %>
           <%= link_to 'Show', admin_sync_audit_path(sync_audit), class: 'ui blue label' %>
           <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
         </td>
