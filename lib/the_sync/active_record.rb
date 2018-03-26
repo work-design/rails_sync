@@ -58,6 +58,17 @@ module TheSync::ActiveRecord
     connection.execute(sql)
   end
 
+  def drop_temp_table
+    sql = "DROP TABLE IF EXISTS `#{@view_name}`"
+
+    connection.execute(sql)
+  end
+
+  def reset_temp_table
+    drop_temp_table
+    create_temp_table
+  end
+
   def select_view(start: 0, finish: start + 1000)
     sql = <<~HEREDOC
       CREATE VIEW #{@view_name} \

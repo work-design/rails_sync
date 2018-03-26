@@ -7,6 +7,7 @@ module TheSync::Adapter
       options.merge(database_timezone: :local, application_timezone: :local)
       @client = Mysql2::Client.new(options)
       @connection = "mysql://#{options[:username]}:#{options[:password]}@#{options[:host]}:#{options[:port]}/#{options[:database]}"
+      @database = options[:database]
     end
 
     def primary_key
@@ -78,8 +79,7 @@ module TheSync::Adapter
     def tables
       _table = Arel::Table.new 'information_schema.TABLES'
       query = _table.project(_table['table_name'])
-      query = query.where(_table['TABLE_SCHEMA'].eq(database))
-      query = query.and(_table['TABLE_TYPE'].eq('BASE TABLE'))
+      query = query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_TYPE'].eq('BASE TABLE')))
       query = query.order(_table['table_name'])
 
       execute(query.to_sql).map { |table| "`#{table['table_name']}`" }
@@ -104,8 +104,7 @@ module TheSync::Adapter
     def columns
       _table = Arel::Table.new 'information_schema.COLUMNS'
       query = _table.project(_table['COLUMN_NAME'])
-      query =query.where(_table['TABLE_SCHEMA'].eq(database))
-      query = query.and(_table['TABLE_NAME'].eq(table_path))
+      query =query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table_path)))
 
       execute(query.to_sql).map { |column| "`#{column['COLUMN_NAME']}`" }
     end
