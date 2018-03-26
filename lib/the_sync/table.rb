@@ -6,7 +6,13 @@ module TheSync
     end
 
     def dest_indexes
-      @adapter.indexes(@dest_table)
+      results = @adapter.indexes(@dest_table)
+      results = results.map { |result| { result['INDEX_NAME'] => result['COLUMN_NAME'] } }
+      results = results.reduce({}) do |memo, index|
+        memo.merge(index) { |_, value, default| [value, default] }
+      end
+      results.delete('PRIMARY')
+      results
     end
 
     def dest_primary_key
@@ -42,24 +48,20 @@ module TheSync
 
       sql << "  PRIMARY KEY (`#{dest_primary_key}`)"
 
-      _indexes = dest_indexes.reject { |index| index['INDEX_NAME'] == 'PRIMARY' }
-      _indexes = dest_indexes.reject { |index| (Array(index['COLUMN_NAME']) & _columns.map { |col| col['COLUMN_NAME'] }).blank? }
+      _indexes = dest_indexes.reject { |_, value| (Array(value) & _columns.map { |col| col['COLUMN_NAME'] }).blank? }
 
       if _indexes.present?
         sql << ",\n"
       else
         sql << "\n"
       end
-      _indexes.each_with_index do |index, position|
-        sql << "  KEY `#{index['INDEX_NAME']}` ("
-        sql << "`#{index['COLUMN_NAME']}`"
-
-        if position + 1 == _indexes.size
-          sql << ")\n"
-        else
-          sql << "),\n"
-        end
+      _indexes.each do |index, columns|
+        sql << "  KEY `#{index}` ("
+        sql << Array(columns).map { |col| "`#{col}`" }.join(',')
+        sql << "),\n"
       end
+
+      sql.chomp!(",\n")
 
       if pure
         sql
