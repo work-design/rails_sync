@@ -10,16 +10,6 @@ module TheSync::Adapter
       @database = options[:database]
     end
 
-    def primary_key
-      _table = Arel::Table.new 'information_schema.COLUMNS'
-      query = _table.project(_table['COLUMN_NAME'])
-      query = query.where(_table['TABLE_SCHEMA'].eq(database))
-      query = query.and(_table['TABLE_NAME'].eq(table))
-      query = query.and(_table['COLUMN_KEY'].eq('PRI'))
-
-      execute(query.to_sql).each(:as => :array).join(',')
-    end
-
     def ids
       sql = "SELECT MD5(CONCAT(#{primary_key})) AS id FROM #{table_path};"
       execute(sql).each(:as => :array)
@@ -85,28 +75,25 @@ module TheSync::Adapter
       execute(query.to_sql).map { |table| "`#{table['table_name']}`" }
     end
 
-    def desc_table
+    def columns(table_path)
       _table = Arel::Table.new 'information_schema.COLUMNS'
       query = _table.project(_table['COLUMN_NAME'],
                              _table['COLUMN_TYPE'],
                              _table['IS_NULLABLE'],
                              _table['COLUMN_DEFAULT'],
                              _table['EXTRA'],
-                             _table['ORDINAL_POSITION'])
-
-      query = query.where(_table['TABLE_SCHEMA'].eq(database))
-      query = query.and(_table['TABLE_NAME'].eq(table_path))
-
-
-      execute(query.to_sql).each(as: :array)
-    end
-
-    def columns
-      _table = Arel::Table.new 'information_schema.COLUMNS'
-      query = _table.project(_table['COLUMN_NAME'])
+                             _table['COLLATION_NAME'])
       query =query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table_path)))
 
-      execute(query.to_sql).map { |column| "`#{column['COLUMN_NAME']}`" }
+      execute(query.to_sql)
+    end
+
+    def primary_key(table)
+      _table = Arel::Table.new 'information_schema.COLUMNS'
+      query = _table.project(_table['COLUMN_NAME'])
+      query = query.where(_table['TABLE_SCHEMA'].eq(database).and(_table['TABLE_NAME'].eq(table)).and(_table['COLUMN_KEY'].eq('PRI')))
+
+      execute(query.to_sql)
     end
 
     def alter_table(alter, right, left)
@@ -122,7 +109,6 @@ module TheSync::Adapter
       after   = (index > 0)? " AFTER #{after}" : ' FIRST'
 
       sql = "ALTER TABLE #{table_path} #{action} COLUMN #{column} #{type} #{notnull} #{default} #{extra} #{after};"
-      sql
     end
 
 

@@ -19,14 +19,6 @@ module TheSync::Adapter
       @mysql.close
     end
 
-    def table_path
-      "`#{@database}`.`#{@table}`"
-    end
-
-    def arel_table
-      @arel_table ||= Arel::Table.new(table_path)
-    end
-
 
     def is_a_number?(value)
       /^[+-]?\d+?(\.\d+)?$/ === value.to_s

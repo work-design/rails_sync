@@ -1,6 +1,10 @@
 module TheSync
   module Table
 
+    def dest_columns
+      @adapter.columns(@dest_table)
+    end
+
     def checksum
       (@from.checksum == @to.checksum)
     end
