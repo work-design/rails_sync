@@ -18,9 +18,6 @@ module TheSync::ActiveRecord
       _filter_columns = self.column_names - Array(options[:except])
     end
 
-    # 'source.table_name'
-    @view_name = options[:dest].to_s + '_' + self.table_name
-
     @dest_table = options[:dest_table]
     @full_mappings = _filter_columns.map { |column_name|
       next if column_name == primary_key
@@ -37,6 +34,13 @@ module TheSync::ActiveRecord
 
     @adapter = TheSync::Adapter.adapter(options[:dest])
 
+    # 'source.table_name'
+    if same_server?
+      @view_name = @adapter.client.query_options[:database].to_s + '.' + options[:dest_table].to_s
+    else
+      @view_name = options[:dest].to_s + '_' + self.table_name
+    end
+
     TheSync.synchro_types << self.name
 
     extend TheSync::Table
@@ -44,7 +48,11 @@ module TheSync::ActiveRecord
   end
 
   def migrate_sync
+    reset_temp_table
+  end
 
+  def same_server?
+    connection.raw_connection.query_options[:connect_flags] == adapter.client.query_options[:connect_flags]
   end
 
   def create_temp_table
