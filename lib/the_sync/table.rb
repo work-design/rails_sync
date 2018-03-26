@@ -5,6 +5,22 @@ module TheSync
       @adapter.columns(@dest_table)
     end
 
+    def sql_table(table, only: [], except: [])
+
+      column  = alter[0]
+      type    = alter[1]
+      default = value(alter[3], alter[0])
+      action  = (right.any? {|i| i.first == alter.first})? ' MODIFY' : ' ADD'
+      notnull = (alter[2] == 'NO')? ' NOT NULL' : ' NULL'
+      default = (!alter[3].nil?)? " DEFAULT #{default}" : ''
+      extra   = (!alter[4].empty?)? " #{alter[4]}" : ''
+      index   = left.each_index.select{|i| left[i] == alter}.first
+      after   = left[((index > 0)? index - 1 : 0)].first
+      after   = (index > 0)? " AFTER #{after}" : ' FIRST'
+
+      sql = "ALTER TABLE #{table_path} #{action} COLUMN #{column} #{type} #{notnull} #{default} #{extra} #{after};"
+    end
+
     def checksum
       (@from.checksum == @to.checksum)
     end

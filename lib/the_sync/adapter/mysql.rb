@@ -10,33 +10,6 @@ module TheSync::Adapter
       @database = options[:database]
     end
 
-    def ids
-      sql = "SELECT MD5(CONCAT(#{primary_key})) AS id FROM #{table_path};"
-      execute(sql).each(:as => :array)
-    end
-
-    def md5s
-      md5 = columns.map { |column| "COALESCE(#{column}, '#{column}')"}
-      sql     = "SELECT MD5(CONCAT(#{primary_key})) AS id, MD5(CONCAT(#{md5.join(', ')})) AS md5 FROM #{table_path};"
-
-      execute(sql).each(:as => :array)
-    end
-
-    def checksum
-      md5 = columns.map { |column| "COALESCE(#{column}, '#{column}')"}.join(', ')
-      query = table.project Arel.sql("SUM(CRC32(CONCAT(#{md5}))) AS sum")
-
-      execute(query.to_sql).each(:as => :array).first.first.to_i
-    end
-
-    def drop_column(name)
-      sql  = 'ALTER TABLE '
-      sql << table_path
-      sql << ' DROP COLUMN '
-      sql << name
-      sql << ';'
-    end
-
     def value(value, key = nil)
       if value.kind_of?(Array)
         value(value.first, key)
@@ -95,22 +68,6 @@ module TheSync::Adapter
 
       execute(query.to_sql)
     end
-
-    def alter_table(alter, right, left)
-      column  = alter[0]
-      type    = alter[1]
-      default = value(alter[3], alter[0])
-      action  = (right.any? {|i| i.first == alter.first})? ' MODIFY' : ' ADD'
-      notnull = (alter[2] == 'NO')? ' NOT NULL' : ' NULL'
-      default = (!alter[3].nil?)? " DEFAULT #{default}" : ''
-      extra   = (!alter[4].empty?)? " #{alter[4]}" : ''
-      index   = left.each_index.select{|i| left[i] == alter}.first
-      after   = left[((index > 0)? index - 1 : 0)].first
-      after   = (index > 0)? " AFTER #{after}" : ' FIRST'
-
-      sql = "ALTER TABLE #{table_path} #{action} COLUMN #{column} #{type} #{notnull} #{default} #{extra} #{after};"
-    end
-
 
   end
 end
