@@ -54,7 +54,11 @@ class SyncAudit < ApplicationRecord
 
   def self.synchro_apply(type, action: ['update', 'delete', 'insert'])
     SyncAudit.where(synchro_type: type, action: action).find_each do |sync_audit|
-      sync_audit.apply_changes
+      begin
+        sync_audit.apply_changes
+      rescue SystemStackError, ActiveRecordError => e
+        logger.warn e.message
+      end
     end
   end
 
