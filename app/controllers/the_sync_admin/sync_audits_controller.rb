@@ -15,9 +15,8 @@ class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
   end
 
   def batch
-    SyncAudit.synchro_apply params[:synchro_type]
-
-    redirect_to admin_sync_audits_url, notice: 'Batch Apply Sync Run successfully '
+    AuditApplyJob.perform_later params[:synchro_type]
+    redirect_to admin_sync_audits_url, notice: 'Batch Apply Sync Run successfully in backend'
   end
 
   def show
