@@ -8,9 +8,7 @@ module TheSync
     def dest_indexes
       results = @adapter.indexes(@dest_table)
       results = results.map { |result| { result['INDEX_NAME'] => result['COLUMN_NAME'] } }
-      results = results.reduce({}) do |memo, index|
-        memo.merge(index) { |_, value, default| [value, default] }
-      end
+      results.to_combined_hash  # rails_com core ext
       results.delete('PRIMARY')
       results
     end
