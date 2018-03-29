@@ -57,7 +57,7 @@ module TheSync::Analyze
   end
 
   def dest_arel_table
-    @dest_arel_table ||= Arel::Table.new(@view_name)
+    @dest_arel_table ||= Arel::Table.new(@view_name, as: 't1')
   end
 
   def analyze_conditions
