@@ -1,6 +1,6 @@
 require 'the_sync/adapter'
 require 'the_sync/table'
-require 'the_sync/analyze'
+require 'the_sync/analyzer'
 
 module TheSync::ActiveRecord
   # source
@@ -27,25 +27,21 @@ module TheSync::ActiveRecord
         [column_name, column_name]
       end
     }.compact
-    options[:dest_pk] = _mappings.key?(self.primary_key) ? _mappings[self.primary_key] : primary_key
+    options[:dest_primary_key] = _mappings.key?(self.primary_key) ? _mappings[self.primary_key] : primary_key
 
     @my_columns = [primary_key] + options[:full_mappings].map { |col| col[0] }
-    options[:dest_columns] = [options[:dest_pk]] + options[:full_mappings].map { |col| col[1] }
-
-    options[:adapter] = TheSync::Adapter.adapter(options[:dest])
-
-    # 'source.table_name'
-    if connection.raw_connection.query_options[:connect_flags] == options[:adapter].client.query_options[:connect_flags]
-      options[:view_name] = options[:adapter].client.query_options[:database].to_s + '.' + options[:dest_table].to_s
-    else
-      options[:view_name] = options[:dest].to_s + '_' + self.table_name
-    end
+    options[:dest_columns] = [options[:dest_primary_key]] + options[:full_mappings].map { |col| col[1] }
 
     TheSync.synchro_types << self.name
     @syncs << options
   end
 
-  
+  def analyze_diffs(*type)
+    @syncs.each do |options|
+      analyzer = TheSync::Analyzer.new(connection: self.connection, **options)
+      analyzer.cache_all_diffs(*type)
+    end
+  end
 
 end
 

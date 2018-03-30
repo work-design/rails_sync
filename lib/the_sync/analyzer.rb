@@ -1,16 +1,12 @@
-module TheSync::Analyze
+class TheSync::Analyzer
+  include TheSync::Table
+  attr_reader :connection
 
-  def analyze_diffs(type = 'update')
-    sql = fetch_diffs(type)
-    results = connection.execute(sql)
-    fields = results.fields.in_groups(2).first
-    arr_value = results.map do |result|
-      r = result.in_groups(2)
-      hash_value = fields.zip( r[0].zip(r[1]) ).to_h
-      hash_value.select { |key, v| v[0] != v[1] || key == primary_key  }
-    end
-    arr_value
-    #hash_value = .zip(arr_value)
+  def initialize(options = {})
+    @adapter = TheSync::Adapter.adapter(options[:dest])
+    @my_arel_table ||= Arel::Table.new(self.table_name)
+    @dest_arel_table ||= Arel::Table.new(@view_name, as: 't1')
+    @connection = options[:connection]
   end
 
   def cache_all_diffs
@@ -26,6 +22,17 @@ module TheSync::Analyze
       audit.action = type
       audit.audited_changes = diff
       audit.save
+    end
+  end
+
+  def analyze_diffs(type = 'update')
+    sql = fetch_diffs(type)
+    results = connection.execute(sql)
+    fields = results.fields.in_groups(2).first
+    results.map do |result|
+      r = result.in_groups(2)
+      hash_value = fields.zip( r[0].zip(r[1]) ).to_h
+      hash_value.select { |key, v| v[0] != v[1] || key == primary_key  }
     end
   end
 
@@ -50,14 +57,6 @@ module TheSync::Analyze
     attrs = @my_columns.map { |col| my_arel_table[col] }
     attrs += @dest_columns.map { |col| dest_arel_table[col] }
     my_arel_table.project(*attrs)
-  end
-
-  def my_arel_table
-    @my_arel_table ||= Arel::Table.new(self.table_name)
-  end
-
-  def dest_arel_table
-    @dest_arel_table ||= Arel::Table.new(@view_name, as: 't1')
   end
 
   def analyze_conditions

@@ -1,6 +1,19 @@
 module TheSync
   module Table
 
+    def xxx
+      # 'source.table_name'
+      if same_server?
+        @view_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
+      else
+        @view_name = options[:dest].to_s + '_' + self.table_name
+      end
+    end
+
+    def same_server?
+      connection.raw_connection.query_options[:connect_flags] == @adapter.client.query_options[:connect_flags]
+    end
+
     def dest_columns
       @adapter.columns(@dest_table)
     end
@@ -72,8 +85,9 @@ module TheSync
       reset_temp_table
     end
 
-    def same_server?
-      connection.raw_connection.query_options[:connect_flags] == adapter.client.query_options[:connect_flags]
+    def reset_temp_table
+      drop_temp_table
+      create_temp_table
     end
 
     def create_temp_table
@@ -83,37 +97,20 @@ module TheSync
       sql << "ENGINE=FEDERATED\n"
       sql << "CONNECTION='#{adapter.connection}/#{@dest_table}';"
 
-      connection.execute(sql)
+      @connection.execute(sql)
     end
 
     def drop_temp_table
       sql = "DROP TABLE IF EXISTS `#{@view_name}`"
 
-      connection.execute(sql)
-    end
-
-    def reset_temp_table
-      drop_temp_table
-      create_temp_table
-    end
-
-    def select_view(start: 0, finish: start + 1000)
-      sql = <<~HEREDOC
-      CREATE VIEW #{@view_name} \
-      SELECT #{@dest_columns.join(',')} \
-      FROM #{@dest_table} \
-      WHERE #{@dest_pk} >= #{start} AND #{@dest_pk} <= #{finish}
-      ORDER BY #{@dest_pk} ASC
-      HEREDOC
-
-      @adapter.client.query(sql)
+      @connection.execute(sql)
     end
 
     def source_select
       query = table.project columns.map { |column| table[column] }
       query = query.where table[primary_key].in(ids)
 
-      execute(query.to_sql).each
+      @connection.execute(query.to_sql).each
     end
 
   end

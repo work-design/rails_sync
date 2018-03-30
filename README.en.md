@@ -47,4 +47,4 @@ Bug report or pull request are welcome.
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## reference
-* [mysqlsync](https://github.com/swapbyt3s/mysqlsync), The tool gives me inspiration, thanks!
+* [mysqlsync](https://github.com/swapbyt3s/mysqlsync), The tool brings me inspiration.
