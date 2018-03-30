@@ -10,35 +10,6 @@ module TheSync::Adapter
       @database = options[:database]
     end
 
-    def value(value, key = nil)
-      if value.kind_of?(Array)
-        value(value.first, key)
-      else
-        if value.nil?
-          'NULL'
-        elsif value == 'CURRENT_TIMESTAMP'
-          value
-        elsif key.nil?
-          if !is_a_number?(value)
-            "'#{value}'"
-          else
-            value
-          end
-        else
-          case get_datatype(key)
-            when 'INT', 'TINYINT', 'SMALLINT', 'MEDIUMINT', 'BIGINT', 'FLOAT', 'DOUBLE', 'DECIMAL'
-              value
-            when 'DATE', 'DATETIME', 'TIMESTAMP', 'TIME', 'YEAR'
-              "'#{value}'"
-            when 'CHAR', 'VARCHAR', 'BLOB', 'TEXT', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT', 'ENUM'
-              value(@mysql.escape(value))
-            else
-              value(value)
-          end
-        end
-      end
-    end
-
     def tables
       _table = Arel::Table.new 'information_schema.TABLES'
       query = _table.project(_table['table_name'])
