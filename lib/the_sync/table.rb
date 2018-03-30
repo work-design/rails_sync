@@ -68,73 +68,52 @@ module TheSync
       end
     end
 
-    def checksum
-      (@from.checksum == @to.checksum)
+    def migrate_sync
+      reset_temp_table
     end
 
-    def valid_schema
-      @from.primary_key && @to.primary_key
+    def same_server?
+      connection.raw_connection.query_options[:connect_flags] == adapter.client.query_options[:connect_flags]
     end
 
-    def get_dump_head
-      @to.dump_head
+    def create_temp_table
+      sql = "CREATE TABLE #{@view_name} (\n"
+      sql << dest_sql_table(only: @dest_columns)
+      sql << ")"
+      sql << "ENGINE=FEDERATED\n"
+      sql << "CONNECTION='#{adapter.connection}/#{@dest_table}';"
+
+      connection.execute(sql)
     end
 
-    def get_dump_bottom
-      @to.dump_bottom
+    def drop_temp_table
+      sql = "DROP TABLE IF EXISTS `#{@view_name}`"
+
+      connection.execute(sql)
     end
 
-    def equal_table
-      (@from.desc_table == @to.desc_table)
+    def reset_temp_table
+      drop_temp_table
+      create_temp_table
     end
 
-    def do_alter_table_modify
-      left   = @from.get_desc_table
-      right  = @to.get_desc_table
-      diff   = left - right
+    def select_view(start: 0, finish: start + 1000)
+      sql = <<~HEREDOC
+      CREATE VIEW #{@view_name} \
+      SELECT #{@dest_columns.join(',')} \
+      FROM #{@dest_table} \
+      WHERE #{@dest_pk} >= #{start} AND #{@dest_pk} <= #{finish}
+      ORDER BY #{@dest_pk} ASC
+      HEREDOC
 
-      diff.map { |alter|
-        @to.alter_table(alter, right, left)
-      }
+      @adapter.client.query(sql)
     end
 
-    def do_alter_table_remove
-      left   = @from.get_desc_table
-      right  = @to.get_desc_table
-      remove = right.map{|k,v| k } - left.map{|k,v| k }
+    def source_select
+      query = table.project columns.map { |column| table[column] }
+      query = query.where table[primary_key].in(ids)
 
-      remove.map { |column|
-        @to.drop_column(column)
-      }
-    end
-
-    def migrate_items
-      insert_items.each { |row| puts row }
-      update_items.each { |row| puts row }
-      delete_items.each { |row| puts row }
-    end
-
-    def insert_items
-      ids = @from.ids - @to.ids
-      items = @from.data(ids)
-
-      @to.insert(items)
-    end
-
-    def update_items
-      left  = (@from.md5s - @to.md5s).map{ |k, _| k }
-      right = (@to.md5s   - @from.md5s).map{ |k, _| k }
-      diff  = left & right
-
-      items = @from.data(diff)
-
-      @to.update(items)
-    end
-
-    def delete_items
-      ids = @to.ids - @from.ids
-
-      @to.delete ids
+      execute(query.to_sql).each
     end
 
   end

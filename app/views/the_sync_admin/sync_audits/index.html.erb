@@ -31,7 +31,7 @@
         <td><%= sync_audit.action_i18n %></td>
         <td><%= simple_format_hash sync_audit.audited_changes %></td>
         <td><%= sync_audit.state_i18n %></td>
-        <td>
+        <td class="ui labels">
           <% unless sync_audit.applied? %>
             <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
           <% end %>
