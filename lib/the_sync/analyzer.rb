@@ -1,12 +1,16 @@
 class TheSync::Analyzer
   include TheSync::Table
-  attr_reader :connection
+  attr_reader :connection, :my_arel_table, :dest_arel_table, :synchro_type
 
   def initialize(options = {})
     @adapter = TheSync::Adapter.adapter(options[:dest])
-    @primary_key = options[:primary_key]
-    @dest_primary_key = options[:dest_primary_key]
+    @connection = options[:connection]
+
+    @synchro_type = options[:model_name]
     @table_name = options[:table_name]
+    @dest_table = options[:dest_table]
+    @primary_key = options[:primary_key].to_s
+    @dest_primary_key = options[:dest_primary_key]
 
     @full_mappings = options[:full_mappings]
     @my_columns = [@primary_key] + @full_mappings.map { |col| col[0] }
@@ -15,7 +19,6 @@ class TheSync::Analyzer
     instance_table
     @my_arel_table ||= Arel::Table.new(@table_name)
     @dest_arel_table ||= Arel::Table.new(@dest_table_name, as: 't1')
-    @connection = options[:connection]
   end
 
   def cache_all_diffs
@@ -26,8 +29,8 @@ class TheSync::Analyzer
 
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
-      audit = SyncAudit.new synchro_type: self.name
-      audit.synchro_id = diff.delete('id').compact.first
+      audit = SyncAudit.new synchro_type: synchro_type
+      audit.synchro_id = diff.delete(@primary_key).compact.first
       audit.action = type
       audit.audited_changes = diff
       audit.save

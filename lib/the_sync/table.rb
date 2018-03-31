@@ -11,7 +11,7 @@ module TheSync
     end
 
     def same_server?
-      connection.raw_connection.query_options[:connect_flags] == @adapter.client.query_options[:connect_flags]
+      @connection.raw_connection.query_options[:connect_flags] == @adapter.client.query_options[:connect_flags]
     end
 
     def dest_columns

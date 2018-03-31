@@ -4,7 +4,7 @@ class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
   def index
     q_params = params.permit(:synchro_type, :state)
     @sync_audits = SyncAudit.default_where(q_params).page(params[:page])
-    @synchro_types = TheSync.synchro_types | SyncAudit.synchro_types
+    @synchro_types = TheSync.synchro_types.uniq | SyncAudit.synchro_types
   end
 
   def sync
