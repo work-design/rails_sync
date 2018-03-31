@@ -14,9 +14,9 @@ module TheSync::ActiveRecord
     _mappings = options[:mapping].to_h
 
     if options[:only]
-      _filter_columns = self.column_names & Array(options[:only])
+      _filter_columns = self.column_names & Array(options.delete(:only))
     else
-      _filter_columns = self.column_names - Array(options[:except])
+      _filter_columns = self.column_names - Array(options.delete(:except))
     end
 
     options[:full_mappings] = _filter_columns.map { |column_name|
@@ -28,9 +28,7 @@ module TheSync::ActiveRecord
       end
     }.compact
     options[:dest_primary_key] = _mappings.key?(self.primary_key) ? _mappings[self.primary_key] : primary_key
-
-    @my_columns = [primary_key] + options[:full_mappings].map { |col| col[0] }
-    options[:dest_columns] = [options[:dest_primary_key]] + options[:full_mappings].map { |col| col[1] }
+    options[:primary_key] = self.primary_key
 
     TheSync.synchro_types << self.name
     @syncs << options
