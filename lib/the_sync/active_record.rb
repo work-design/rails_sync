@@ -31,10 +31,10 @@ module TheSync::ActiveRecord
     @syncs << options
   end
 
-  def analyze_diffs(types: ['update'])
+  def analyze_diffs(type = 'update')
     @syncs.each do |options|
       analyzer = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, **options)
-      analyzer.cache_all_diffs(types)
+      analyzer.analyze_diffs(type)
     end
   end
 
