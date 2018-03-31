@@ -7,28 +7,25 @@ module TheSync::ActiveRecord
   # source_client
   # dest_table
   def acts_as_sync(options = {})
-    options[:dest_table] ||= self.table_name
-
     @syncs ||= []
 
-    _mappings = options[:mapping].to_h
-
+    options[:dest_table] ||= self.table_name
+    _mappings = Array(options.delete(:mapping)).to_h
     if options[:only]
       _filter_columns = self.column_names & Array(options.delete(:only))
     else
       _filter_columns = self.column_names - Array(options.delete(:except))
     end
-
+    options[:primary_key] = (options[:primary_key] || self.primary_key).to_s
+    options[:dest_primary_key] = _mappings.key?(options[:primary_key]) ? _mappings[options[:primary_key]] : options[:primary_key]
     options[:full_mappings] = _filter_columns.map { |column_name|
-      next if column_name == primary_key
+      next if column_name == options[:primary_key]
       if _mappings.key?(column_name)
         [column_name, _mappings[column_name]]
       else
         [column_name, column_name]
       end
     }.compact
-    options[:dest_primary_key] = _mappings.key?(self.primary_key) ? _mappings[self.primary_key] : primary_key
-    options[:primary_key] = self.primary_key
 
     TheSync.synchro_types << self.name
     @syncs << options
@@ -42,7 +39,6 @@ module TheSync::ActiveRecord
   end
 
 end
-
 
 ActiveSupport.on_load :active_record do
   extend TheSync::ActiveRecord
