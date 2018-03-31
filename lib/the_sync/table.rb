@@ -1,12 +1,12 @@
 module TheSync
   module Table
 
-    def xxx
+    def instance_table
       # 'source.table_name'
       if same_server?
-        @view_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
+        @dest_table_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
       else
-        @view_name = options[:dest].to_s + '_' + self.table_name
+        @dest_table_name = options[:dest].to_s + '_' + @table_name
       end
     end
 
@@ -91,7 +91,7 @@ module TheSync
     end
 
     def create_temp_table
-      sql = "CREATE TABLE #{@view_name} (\n"
+      sql = "CREATE TABLE #{@dest_table_name} (\n"
       sql << dest_sql_table(only: @dest_columns)
       sql << ")"
       sql << "ENGINE=FEDERATED\n"
@@ -101,7 +101,7 @@ module TheSync
     end
 
     def drop_temp_table
-      sql = "DROP TABLE IF EXISTS `#{@view_name}`"
+      sql = "DROP TABLE IF EXISTS `#{@dest_table_name}`"
 
       @connection.execute(sql)
     end

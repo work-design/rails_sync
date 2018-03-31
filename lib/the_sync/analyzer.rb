@@ -6,15 +6,15 @@ class TheSync::Analyzer
     @adapter = TheSync::Adapter.adapter(options[:dest])
     @primary_key = options[:primary_key]
     @dest_primary_key = options[:dest_primary_key]
+    @table_name = options[:table_name]
 
     @full_mappings = options[:full_mappings]
-
     @my_columns = [@primary_key] + @full_mappings.map { |col| col[0] }
     @dest_columns = [@dest_primary_key] + @full_mappings.map { |col| col[1] }
 
-
-    @my_arel_table ||= Arel::Table.new(self.table_name)
-    @dest_arel_table ||= Arel::Table.new(@view_name, as: 't1')
+    instance_table
+    @my_arel_table ||= Arel::Table.new(@table_name)
+    @dest_arel_table ||= Arel::Table.new(@dest_table_name, as: 't1')
     @connection = options[:connection]
   end
 
