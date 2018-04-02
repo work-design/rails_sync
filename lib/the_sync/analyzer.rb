@@ -29,9 +29,11 @@ class TheSync::Analyzer
 
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
+      id = diff.delete(@primary_key).compact.first
       audit = SyncAudit.new synchro_type: synchro_type
-      audit.synchro_id = diff.delete(@primary_key).compact.first
+      audit.synchro_id = id if @primary_key == 'id'
       audit.synchro_primary_key = @primary_key
+      audit.synchro_primary_value = id
       audit.operation = type
       audit.audited_changes = diff
       audit.save

@@ -5,6 +5,7 @@ class CreateSyncAudits < ActiveRecord::Migration[5.2]
       t.references :synchro, polymorphic: true
       t.references :destined
       t.string :synchro_primary_key, default: 'id'
+      t.string :synchro_primary_value
       t.string :operation
       t.string :audited_changes, limit: 4096
       t.string :note, limit: 1024

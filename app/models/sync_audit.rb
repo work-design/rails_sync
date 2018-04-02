@@ -3,7 +3,8 @@ class SyncAudit < ApplicationRecord
 
   enum state: {
     init: 'init',
-    applied: 'applied'
+    applied: 'applied',
+    finished: 'finished'
   }
 
   enum operation: {
@@ -14,6 +15,8 @@ class SyncAudit < ApplicationRecord
 
   belongs_to :synchro, polymorphic: true, optional: true
   belongs_to :operator, polymorphic: true, optional: true
+
+  scope :for_callback, -> { where(state: :applied) }
 
   after_initialize if: :new_record? do
     self.state = 'init'
@@ -37,8 +40,14 @@ class SyncAudit < ApplicationRecord
       _synchro.assign_attributes to_apply_params
       self.class.transaction do
         _synchro.save!
-        self.update! state: 'applied'
+        self.update! synchro_id: _synchro.id, state: 'applied'
       end
+    end
+  end
+
+  def apply_callback
+    SyncAudit.for_callback.each do |sync|
+      sync.synchro.respond_to?(:after_sync) && sync.synchro.after_sync
     end
   end
 
