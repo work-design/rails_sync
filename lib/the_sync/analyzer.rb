@@ -31,7 +31,7 @@ class TheSync::Analyzer
     analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: synchro_type
       audit.synchro_id = diff.delete(@primary_key).compact.first
-      audit.action = type
+      audit.operation = type
       audit.audited_changes = diff
       audit.save
     end

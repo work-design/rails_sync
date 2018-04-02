@@ -6,7 +6,7 @@ class SyncAudit < ApplicationRecord
     applied: 'applied'
   }
 
-  enum action: {
+  enum operation: {
     update: 'update',
     delete: 'delete',
     insert: 'insert'
@@ -20,18 +20,18 @@ class SyncAudit < ApplicationRecord
   end
 
   def apply_changes
-    if self.action_update? && self.synchro
+    if self.operation_update? && self.synchro
       self.synchro.assign_attributes to_apply_params
       self.class.transaction do
         self.synchro.save!
         self.update! state: 'applied'
       end
-    elsif self.action_delete? && self.synchro
+    elsif self.operation_delete? && self.synchro
       self.class.transaction do
         self.synchro.destroy!
         self.update! state: 'applied'
       end
-    elsif self.action_insert?
+    elsif self.operation_insert?
       synchro_model = self.synchro_type.constantize
       _synchro = synchro_model.find_or_initialize_by(id: self.synchro_id)
       _synchro.assign_attributes to_apply_params
@@ -52,8 +52,8 @@ class SyncAudit < ApplicationRecord
     SyncAudit.select(:synchro_type).distinct.pluck(:synchro_type).compact
   end
 
-  def self.synchro_apply(type, action: ['update', 'delete', 'insert'])
-    SyncAudit.where(synchro_type: type, action: action).find_each do |sync_audit|
+  def self.synchro_apply(type, operation: ['update', 'delete', 'insert'])
+    SyncAudit.where(synchro_type: type, operation: operation).find_each do |sync_audit|
       begin
         sync_audit.apply_changes
       rescue SystemStackError, ActiveRecordError => e
