@@ -16,8 +16,6 @@ class SyncAudit < ApplicationRecord
   belongs_to :synchro, polymorphic: true, optional: true
   belongs_to :operator, polymorphic: true, optional: true
 
-  scope :for_callback, -> { where(state: :applied) }
-
   after_initialize if: :new_record? do
     self.state = 'init'
   end
@@ -36,18 +34,12 @@ class SyncAudit < ApplicationRecord
       end
     elsif self.operation_insert?
       synchro_model = self.synchro_type.constantize
-      _synchro = synchro_model.find_or_initialize_by(self.synchro_primary_key => self.synchro_id)
+      _synchro = synchro_model.find_or_initialize_by(self.synchro_primary_key => self.synchro_primary_value)
       _synchro.assign_attributes to_apply_params
       self.class.transaction do
         _synchro.save!
         self.update! synchro_id: _synchro.id, state: 'applied'
       end
-    end
-  end
-
-  def apply_callback
-    SyncAudit.for_callback.each do |sync|
-      sync.synchro.respond_to?(:after_sync) && sync.synchro.after_sync
     end
   end
 
@@ -61,7 +53,16 @@ class SyncAudit < ApplicationRecord
     SyncAudit.select(:synchro_type).distinct.pluck(:synchro_type).compact
   end
 
-  def self.synchro_apply(type, operation: ['update', 'delete', 'insert'])
+  def self.apply_callback(type, operation: ['update', 'delete', 'insert'])
+    SyncAudit.where(state: :applied, synchro_type: type, operation: operation).find_each do |sync|
+      SyncAudit.transaction do
+        sync.synchro.respond_to?(:after_sync) && sync.synchro.after_sync
+        sync.update! state: 'finished'
+      end
+    end
+  end
+
+  def self.apply_synchro(type, operation: ['update', 'delete', 'insert'])
     SyncAudit.where(state: 'init', synchro_type: type, operation: operation).find_each do |sync_audit|
       begin
         sync_audit.apply_changes

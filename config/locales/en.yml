@@ -18,3 +18,4 @@ en:
       sync_audit/state:
         init: Pending
         applied: Applied
+        finished: Finished
