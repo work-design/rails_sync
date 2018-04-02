@@ -66,7 +66,7 @@ class SyncAudit < ApplicationRecord
     SyncAudit.where(state: 'init', synchro_type: type, operation: operation).find_each do |sync_audit|
       begin
         sync_audit.apply_changes
-      rescue SystemStackError, ActiveRecordError => e
+      rescue SystemStackError, ActiveRecord::ActiveRecordError => e
         logger.warn e.message
       end
     end
