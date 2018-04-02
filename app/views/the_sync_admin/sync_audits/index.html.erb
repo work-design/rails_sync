@@ -27,7 +27,10 @@
       <tr>
         <td><%= sync_audit.id %></td>
         <td><%= sync_audit.synchro_type %></td>
-        <td><%= sync_audit.synchro_id %></td>
+        <td>
+          <p><%= sync_audit.synchro_id %></p>
+          <p><%= sync_audit.synchro_primary_key %></p>
+        </td>
         <td><%= sync_audit.operation_i18n %></td>
         <td><%= simple_format_hash sync_audit.audited_changes %></td>
         <td><%= sync_audit.state_i18n %></td>

@@ -31,6 +31,7 @@ class TheSync::Analyzer
     analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: synchro_type
       audit.synchro_id = diff.delete(@primary_key).compact.first
+      audit.synchro_primary_key = @primary_key
       audit.operation = type
       audit.audited_changes = diff
       audit.save
@@ -56,7 +57,8 @@ class TheSync::Analyzer
       query = analyze_table.join(dest_arel_table, Arel::Nodes::RightOuterJoin).on(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key]))
       query.where(my_arel_table[@primary_key].eq(nil))
     elsif type == 'delete'
-      query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin).on(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key]))
+      query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin)
+                .on(my_arel_table[@primary_key].not_eq(nil).and(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key])))
       query.where(dest_arel_table[@dest_primary_key].eq(nil))
     else
       query = analyze_table.join(dest_arel_table, Arel::Nodes::FullOuterJoin).on(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key]))
