@@ -58,8 +58,8 @@ class TheSync::Analyzer
       query.where(my_arel_table[@primary_key].eq(nil))
     elsif type == 'delete'
       query = analyze_table.join(dest_arel_table, Arel::Nodes::OuterJoin)
-                .on(my_arel_table[@primary_key].not_eq(nil).and(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key])))
-      query.where(dest_arel_table[@dest_primary_key].eq(nil))
+                .on(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key]))
+      query.where(my_arel_table[@primary_key].not_eq(nil).and(dest_arel_table[@dest_primary_key].eq(nil)))
     else
       query = analyze_table.join(dest_arel_table, Arel::Nodes::FullOuterJoin).on(my_arel_table[@primary_key].eq(dest_arel_table[@dest_primary_key]))
     end
