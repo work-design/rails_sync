@@ -13,8 +13,14 @@
     <thead>
       <tr>
         <th><%= SyncAudit.human_attribute_name(:id) %></th>
-        <th><%= SyncAudit.human_attribute_name(:synchro_type) %></th>
-        <th><%= SyncAudit.human_attribute_name(:synchro_id) %></th>
+        <th>
+          <p><%= SyncAudit.human_attribute_name(:synchro_type) %></p>
+          <p><%= SyncAudit.human_attribute_name(:synchro_id) %></p>
+        </th>
+        <th>
+          <p><%= SyncAudit.human_attribute_name(:synchro_primary_key) %></p>
+          <p><%= SyncAudit.human_attribute_name(:synchro_primary_value) %></p>
+        </th>
         <th><%= SyncAudit.human_attribute_name(:action) %></th>
         <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
         <th><%= SyncAudit.human_attribute_name(:state) %></th>
@@ -26,10 +32,13 @@
     <% @sync_audits.each do |sync_audit| %>
       <tr>
         <td><%= sync_audit.id %></td>
-        <td><%= sync_audit.synchro_type %></td>
         <td>
+          <p><%= sync_audit.synchro_type %></p>
           <p><%= sync_audit.synchro_id %></p>
+        </td>
+        <td>
           <p><%= sync_audit.synchro_primary_key %></p>
+          <p><%= sync_audit.synchro_primary_value %></p>
         </td>
         <td><%= sync_audit.operation_i18n %></td>
         <td><%= simple_format_hash sync_audit.audited_changes %></td>
