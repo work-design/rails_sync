@@ -99,13 +99,13 @@ module TheSync
       sql << "ENGINE=FEDERATED\n"
       sql << "CONNECTION='#{adapter.connection}/#{@dest_table}';"
 
-      @connection.execute(sql)
+      connection.execute(sql)
     end
 
     def drop_temp_table
       sql = "DROP TABLE IF EXISTS `#{@dest_table_name}`"
 
-      @connection.execute(sql)
+      connection.execute(sql)
     end
 
   end

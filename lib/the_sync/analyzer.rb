@@ -1,15 +1,15 @@
 class TheSync::Analyzer
   include TheSync::Table
-  attr_reader :adapter, :connection, :my_arel_table, :dest_arel_table, :synchro_type
+  attr_reader :adapter, :my_arel_table, :dest_arel_table, :synchro_type
 
   def initialize(options = {})
     @adapter = TheSync::Adapter.adapter(options[:dest])
     @dest = options[:dest]
-    @connection = options[:connection]
+    @record = options[:record]
     @server_id = options[:server_id]
 
-    @synchro_type = options[:model_name]
-    @table_name = options[:table_name]
+    @synchro_type = @record.name
+    @table_name = @record.table_name
     @dest_table = options[:dest_table]
     @primary_key = options[:primary_key].to_s
     @dest_primary_key = options[:dest_primary_key]
@@ -21,6 +21,10 @@ class TheSync::Analyzer
     instance_table
     @my_arel_table ||= Arel::Table.new(@table_name)
     @dest_arel_table ||= Arel::Table.new(@dest_table_name, as: 't1')
+  end
+
+  def connection
+    @record.connection
   end
 
   def cache_all_diffs

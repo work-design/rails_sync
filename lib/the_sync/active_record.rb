@@ -28,7 +28,7 @@ module TheSync::ActiveRecord
     }.compact
 
     options[:server_id] = self.server_id
-    options[:analyzer] = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
+    options[:analyzer] = TheSync::Analyzer.new(record: self, **options)
 
     TheSync.synchro_types << self.name
     @syncs << options
