@@ -13,16 +13,7 @@ module TheSync
 
     # should be confirmed?
     def same_server?
-      begin
-        result = @connection.raw_connection.query('select @@server_uuid')
-      rescue Mysql2::Error
-        result = @connection.raw_connection.query('select @@server_id')
-      end
-      _id = result.to_a.flatten.first
-      if _id.is_a?(Hash)
-        _id.values.first
-      end
-      _id == @adapter.server_id
+      @server_id == @adapter.server_id
     end
 
     def dest_columns

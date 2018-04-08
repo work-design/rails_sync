@@ -6,6 +6,7 @@ class TheSync::Analyzer
     @adapter = TheSync::Adapter.adapter(options[:dest])
     @dest = options[:dest]
     @connection = options[:connection]
+    @server_id = options[:server_id]
 
     @synchro_type = options[:model_name]
     @table_name = options[:table_name]

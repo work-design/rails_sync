@@ -28,9 +28,24 @@ module TheSync::ActiveRecord
     }.compact
 
     options[:analyzer] = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
+    options[:server_id] = server_id
 
     TheSync.synchro_types << self.name
     @syncs << options
+  end
+
+  def server_id
+    begin
+      result = connection.raw_connection.query('select @@server_uuid')
+    rescue Mysql2::Error
+      result = connection.raw_connection.query('select @@server_id')
+    end
+    _id = result.to_a.flatten.first
+    if _id.is_a?(Hash)
+      _id.values.first
+    else
+      _id
+    end
   end
 
   def analyze_diffs(type = 'update')
