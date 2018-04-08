@@ -28,4 +28,7 @@
 3. 通过 left_join 找出左表多出的记录；
 4. 通过 right_join 找出右表多出的记录；
 
-##
+## Remote Table 
+* postgresql: [dblink](https://www.postgresql.org/docs/10/static/dblink.html)
+* mysql: [FEDERATED](https://dev.mysql.com/doc/refman/5.7/en/federated-storage-engine.html)
+* mariadb: [CONNECT](https://mariadb.com/kb/en/library/connect/)
