@@ -1,5 +1,6 @@
 module TheSync
   module Table
+    attr_reader :dest_table_name
 
     def instance_table
       # 'source.table_name'
@@ -10,6 +11,7 @@ module TheSync
       end
     end
 
+    # should be confirmed?
     def same_server?
       @connection.raw_connection.query_options[:connect_flags] == @adapter.client.query_options[:connect_flags]
     end
@@ -104,13 +106,6 @@ module TheSync
       sql = "DROP TABLE IF EXISTS `#{@dest_table_name}`"
 
       @connection.execute(sql)
-    end
-
-    def source_select
-      query = table.project columns.map { |column| table[column] }
-      query = query.where table[primary_key].in(ids)
-
-      @connection.execute(query.to_sql).each
     end
 
   end

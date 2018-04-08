@@ -7,8 +7,6 @@ module TheSync::Adapter
       _options = TheSync.options[adapter]
       adapter_class = self.class.lookup(_options[:adapter])
       @client = adapter_class.new(_options)
-
-      #ObjectSpace.define_finalizer(self, self.class.method(:finalize))
     end
 
     def execute(sql)
@@ -41,6 +39,13 @@ module TheSync::Adapter
       query = query.where table[primary_key].in(ids)
 
       execute(query.to_sql).each
+    end
+
+    def select(ids = [])
+      query = table.project columns.map { |column| table[column] }
+      query = query.where table[primary_key].in(ids)
+
+      execute(query.to_sql)
     end
 
     def insert(items = [])

@@ -1,6 +1,6 @@
 class TheSync::Analyzer
   include TheSync::Table
-  attr_reader :connection, :my_arel_table, :dest_arel_table, :synchro_type
+  attr_reader :adapter, :connection, :my_arel_table, :dest_arel_table, :synchro_type
 
   def initialize(options = {})
     @adapter = TheSync::Adapter.adapter(options[:dest])

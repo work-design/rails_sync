@@ -27,28 +27,27 @@ module TheSync::ActiveRecord
       end
     }.compact
 
+    options[:analyzer] = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
+
     TheSync.synchro_types << self.name
     @syncs << options
   end
 
   def analyze_diffs(type = 'update')
     @syncs.flat_map do |options|
-      analyzer = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
-      analyzer.analyze_diffs(type)
+      options[:analyzer].analyze_diffs(type)
     end
   end
 
   def cache_diffs(type = 'update')
     @syncs.flat_map do |options|
-      analyzer = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
-      analyzer.cache_diffs(type)
+      options[:analyzer].cache_diffs(type)
     end
   end
 
   def cache_all_diffs
     @syncs.flat_map do |options|
-      analyzer = TheSync::Analyzer.new(connection: self.connection, table_name: self.table_name, model_name: self.name, **options)
-      analyzer.cache_all_diffs
+      options[:analyzer].cache_all_diffs
     end
   end
 
