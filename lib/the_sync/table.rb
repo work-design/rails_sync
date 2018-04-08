@@ -7,13 +7,22 @@ module TheSync
       if same_server?
         @dest_table_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
       else
-        @dest_table_name = options[:dest].to_s + '_' + @table_name
+        @dest_table_name = @dest.to_s + '_' + @table_name
       end
     end
 
     # should be confirmed?
     def same_server?
-      @connection.raw_connection.query_options[:connect_flags] == @adapter.client.query_options[:connect_flags]
+      begin
+        result = @connection.raw_connection.query('select @@server_uuid')
+      rescue Mysql2::Error
+        result = @connection.raw_connection.query('select @@server_id')
+      end
+      _id = result.to_a.flatten.first
+      if _id.is_a?(Hash)
+        _id.values.first
+      end
+      _id == @adapter.server_id
     end
 
     def dest_columns

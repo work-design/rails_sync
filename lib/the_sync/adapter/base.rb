@@ -17,23 +17,6 @@ module TheSync::Adapter
       @mysql.close
     end
 
-
-    def is_a_number?(value)
-      /^[+-]?\d+?(\.\d+)?$/ === value.to_s
-    end
-
-    def remove_timezone(timestamp)
-      "SUBSTRING(#{timestamp}, 1, 19) AS #{timestamp}"
-    end
-
-    def get_datatype(column)
-      get_desc_table.each do |c|
-        if c.first == column
-          return c[1].gsub(/\(\d+(\,\d+)?\)/, '').upcase
-        end
-      end
-    end
-
     def data(ids = [])
       query = table.project columns.map { |column| table[column] }
       query = query.where table[primary_key].in(ids)

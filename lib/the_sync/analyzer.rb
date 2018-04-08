@@ -4,6 +4,7 @@ class TheSync::Analyzer
 
   def initialize(options = {})
     @adapter = TheSync::Adapter.adapter(options[:dest])
+    @dest = options[:dest]
     @connection = options[:connection]
 
     @synchro_type = options[:model_name]

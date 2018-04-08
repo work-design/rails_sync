@@ -10,6 +10,20 @@ module TheSync::Adapter
       @database = options[:database]
     end
 
+    def server_id
+      begin
+        result = @client.query('select @@server_uuid')
+      rescue Mysql2::Error
+        result = @client.query('select @@server_id')
+      end
+      _id = result.to_a.flatten.first
+      if _id.is_a?(Hash)
+        _id.values.first
+      else
+        _id
+      end
+    end
+
     def tables
       _table = Arel::Table.new 'information_schema.TABLES'
       query = _table.project(_table['table_name'])
