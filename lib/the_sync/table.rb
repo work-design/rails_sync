@@ -3,15 +3,15 @@ module TheSync
     attr_reader :dest_table_name
 
     def instance_table
-      # 'source.table_name'
       if same_server?
+        # `source.table_name`
         @dest_table_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
       else
+        # `source_table_name`
         @dest_table_name = @dest.to_s + '_' + @table_name
       end
     end
 
-    # should be confirmed?
     def same_server?
       @server_id == @adapter.server_id
     end
