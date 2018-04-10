@@ -82,12 +82,11 @@ class TheSync::Analyzer
   end
 
   def analyze_conditions
-    first_mapping = @full_mappings[0]
-    condition = my_arel_table[first_mapping[0]].not_eq(dest_arel_table[first_mapping[1]])
-    @full_mappings[1..-1].each do |mapping|
-      condition = condition.or( my_arel_table[mapping[0]].not_eq(dest_arel_table[mapping[1]]) )
+    mappings = @full_mappings.map do |mapping|
+      my_arel_table[mapping[0]].not_eq(dest_arel_table[mapping[1]])
     end
-    condition
+    #mappings.reduce(:or)
+    Arel::Nodes::SqlLiteral.new mappings.map(&:to_sql).join(' OR ')
   end
 
 end
