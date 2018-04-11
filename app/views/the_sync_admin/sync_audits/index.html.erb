@@ -12,19 +12,19 @@
   <table class="ui bottom attached table">
     <thead>
       <tr>
-        <th><%= SyncAudit.human_attribute_name(:id) %></th>
-        <th>
+        <th class="one wide"><%= SyncAudit.human_attribute_name(:id) %></th>
+        <th class="one wide">
           <p><%= SyncAudit.human_attribute_name(:synchro_type) %></p>
           <p><%= SyncAudit.human_attribute_name(:synchro_id) %></p>
         </th>
-        <th>
+        <th class="one wide">
           <p><%= SyncAudit.human_attribute_name(:synchro_primary_key) %></p>
           <p><%= SyncAudit.human_attribute_name(:synchro_primary_value) %></p>
         </th>
-        <th><%= SyncAudit.human_attribute_name(:action) %></th>
-        <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
-        <th><%= SyncAudit.human_attribute_name(:state) %></th>
-        <th>Actions</th>
+        <th class="one wide"><%= SyncAudit.human_attribute_name(:action) %></th>
+        <th class="ten wide"><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
+        <th class="one wide"><%= SyncAudit.human_attribute_name(:state) %></th>
+        <th class="two wide">Actions</th>
       </tr>
     </thead>
 
