@@ -42,7 +42,11 @@ class TheSync::Analyzer
       audit.synchro_primary_value = id
       audit.operation = type
       audit.audited_changes = diff
-      audit.save
+      begin
+        audit.save
+      rescue ActiveRecord::ValueTooLong => e
+        puts e.message
+      end
     end
   end
 
