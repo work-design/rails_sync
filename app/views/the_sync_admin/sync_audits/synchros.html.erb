@@ -1,46 +1,41 @@
-<div>
-
-  <div class="ui top attached menu borderless">
-    <div class="header item">Sync Audits</div>
-  </div>
-
-  <div class="ui segment bottom attached">
-    <%= render 'search_form' %>
-  </div>
-
-  <table class="ui bottom attached table">
-    <thead>
-      <tr>
-        <th><%= SyncAudit.human_attribute_name(:id) %></th>
-        <th><%= SyncAudit.human_attribute_name(:synchro_type) %></th>
-        <th><%= SyncAudit.human_attribute_name(:synchro_id) %></th>
-        <th><%= SyncAudit.human_attribute_name(:action) %></th>
-        <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
-        <th><%= SyncAudit.human_attribute_name(:state) %></th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-
-    <tbody>
-    <% @sync_types.each do |sync_type| %>
-      <tr>
-        <td><%= sync_type %></td>
-        <td><%= sync_audit.synchro_type %></td>
-        <td><%= sync_audit.synchro_id %></td>
-        <td><%= sync_audit.operation_i18n %></td>
-        <td><%= simple_format_hash sync_audit.audited_changes %></td>
-        <td><%= sync_audit.state_i18n %></td>
-        <td>
-          <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
-          <%= link_to 'Show', admin_sync_audit_path(sync_audit), class: 'ui blue label' %>
-          <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
-        </td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-
-  <%= paginate @sync_audits %>
+<div class="ui top attached borderless menu">
+  <div class="header item">Sync Audits</div>
 </div>
 
+<div class="ui attached segment">
+  <%= render 'search_form' %>
+</div>
 
+<table class="ui bottom attached table">
+  <thead>
+    <tr>
+      <th><%= SyncAudit.human_attribute_name(:id) %></th>
+      <th><%= SyncAudit.human_attribute_name(:synchro_type) %></th>
+      <th><%= SyncAudit.human_attribute_name(:synchro_id) %></th>
+      <th><%= SyncAudit.human_attribute_name(:action) %></th>
+      <th><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
+      <th><%= SyncAudit.human_attribute_name(:state) %></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @sync_types.each do |sync_type| %>
+    <tr>
+      <td><%= sync_type %></td>
+      <td><%= sync_audit.synchro_type %></td>
+      <td><%= sync_audit.synchro_id %></td>
+      <td><%= sync_audit.operation_i18n %></td>
+      <td><%= simple_format_hash sync_audit.audited_changes %></td>
+      <td><%= sync_audit.state_i18n %></td>
+      <td>
+        <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
+        <%= link_to 'Show', admin_sync_audit_path(sync_audit), class: 'ui blue label' %>
+        <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= paginate @sync_audits %>
