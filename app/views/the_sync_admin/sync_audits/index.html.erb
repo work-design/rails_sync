@@ -10,19 +10,19 @@
 <table class="ui bottom attached fixed table">
   <thead>
     <tr>
-      <th class="one wide"><%= SyncAudit.human_attribute_name(:id) %></th>
-      <th class="one wide">
+      <th class="two wide"><%= SyncAudit.human_attribute_name(:id) %></th>
+      <th class="two wide">
         <p><%= SyncAudit.human_attribute_name(:synchro_type) %></p>
         <p><%= SyncAudit.human_attribute_name(:synchro_id) %></p>
       </th>
-      <th class="one wide">
+      <th class="two wide">
         <p><%= SyncAudit.human_attribute_name(:synchro_primary_key) %></p>
         <p><%= SyncAudit.human_attribute_name(:synchro_primary_value) %></p>
       </th>
       <th class="one wide"><%= SyncAudit.human_attribute_name(:action) %></th>
       <th class="ten wide"><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
       <th class="one wide"><%= SyncAudit.human_attribute_name(:state) %></th>
-      <th class="two wide">Actions</th>
+      <th class="one wide">Actions</th>
     </tr>
   </thead>
 
@@ -45,8 +45,12 @@
         <% unless sync_audit.applied? %>
           <%= link_to 'apply', apply_admin_sync_audit_path(sync_audit), method: :patch, data: { confirm: 'Are you sure?' }, class: 'ui yellow label' %>
         <% end %>
-        <%= link_to 'Show', admin_sync_audit_path(sync_audit), class: 'ui blue label' %>
-        <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui red label' %>
+        <%= link_to admin_sync_audit_path(sync_audit), class: 'ui min blue icon button' do %>
+          <i class="pencil alternate icon"></i>
+        <% end %>
+        <%= link_to 'Destroy', admin_sync_audit_path(sync_audit), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui mini red icon button' do %>
+          <i class="times icon"></i>
+        <% end %>
       </td>
     </tr>
   <% end %>
