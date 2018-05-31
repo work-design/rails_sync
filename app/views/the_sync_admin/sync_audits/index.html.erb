@@ -16,8 +16,7 @@
         <p><%= SyncAudit.human_attribute_name(:synchro_id) %></p>
       </th>
       <th class="two wide">
-        <p><%= SyncAudit.human_attribute_name(:synchro_primary_key) %></p>
-        <p><%= SyncAudit.human_attribute_name(:synchro_primary_value) %></p>
+        <%= SyncAudit.human_attribute_name(:synchro_params) %>
       </th>
       <th class="one wide"><%= SyncAudit.human_attribute_name(:action) %></th>
       <th class="seven wide"><%= SyncAudit.human_attribute_name(:audited_changes) %></th>
@@ -35,10 +34,7 @@
         <p><%= sync_audit.synchro_type %></p>
         <p><%= sync_audit.synchro_id %></p>
       </td>
-      <td>
-        <p><%= sync_audit.synchro_primary_key %></p>
-        <p><%= sync_audit.synchro_primary_value %></p>
-      </td>
+      <td><%= simple_format(sync_audit.synchro_params) %></td>
       <td><%= sync_audit.operation_i18n %></td>
       <td><%= simple_format_hash sync_audit.audited_changes %></td>
       <td class="ui labels">

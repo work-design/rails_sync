@@ -1,5 +1,6 @@
 class SyncAudit < ApplicationRecord
   serialize :audited_changes, Hash
+  serialize :synchro_params, Hash
 
   enum state: {
     init: 'init',
@@ -21,10 +22,11 @@ class SyncAudit < ApplicationRecord
   end
 
   def apply_changes
-    if self.operation_update? && self.synchro
-      self.synchro.assign_attributes to_apply_params
+    if self.operation_update?
+      _synchro = self.synchro || synchro_model.find_by(synchro_params)
+      _synchro.assign_attributes to_apply_params
       self.class.transaction do
-        self.synchro.save!
+        _synchro.save!
         self.update! state: 'applied'
       end
     elsif self.operation_delete? && self.synchro
@@ -33,14 +35,17 @@ class SyncAudit < ApplicationRecord
         self.update! state: 'applied'
       end
     elsif self.operation_insert?
-      synchro_model = self.synchro_type.constantize
-      _synchro = synchro_model.find_or_initialize_by(self.synchro_primary_key => self.synchro_primary_value)
+      _synchro = synchro_model.find_or_initialize_by(synchro_params)
       _synchro.assign_attributes to_apply_params
       self.class.transaction do
         _synchro.save_sneakily!
         self.update! synchro_id: _synchro.id, state: 'applied'
       end
     end
+  end
+
+  def synchro_model
+    @synchro_model ||= self.synchro_type.constantize
   end
 
   def to_apply_params

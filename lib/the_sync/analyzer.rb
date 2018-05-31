@@ -32,8 +32,7 @@ class TheSync::Analyzer
       id = diff.delete(@primary_key[0]).compact.first
       audit = SyncAudit.new synchro_type: synchro_type
       audit.synchro_id = id if @primary_key[0] == 'id'
-      audit.synchro_primary_key = @primary_key[0]
-      audit.synchro_primary_value = id
+      audit.synchro_params = {}
       audit.operation = type
       audit.audited_changes = diff
       begin
@@ -51,7 +50,9 @@ class TheSync::Analyzer
     results.map do |result|
       r = result.in_groups(2)
       hash_value = fields.zip( r[0].zip(r[1]) ).to_h
-      hash_value.select { |key, v| v[0] != v[1] || key == @primary_key[0] }
+      hash_value.select do |key, v|
+        v[0] != v[1] || @primary_key.include?(key)
+      end
     end
   end
 
