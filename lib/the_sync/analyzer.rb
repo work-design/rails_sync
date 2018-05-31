@@ -29,10 +29,16 @@ class TheSync::Analyzer
 
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
-      id = diff.delete(@primary_key[0]).compact.first
       audit = SyncAudit.new synchro_type: synchro_type
-      audit.synchro_id = id if @primary_key[0] == 'id'
-      audit.synchro_params = {}
+
+      _params = {}
+      @primary_key.each do |primary_key|
+        _params[primary_key] = diff.delete(primary_key).compact.first
+      end
+
+      audit.synchro_params = _params
+      audit.synchro_id = _params['id']
+
       audit.operation = type
       audit.audited_changes = diff
       begin
@@ -51,7 +57,7 @@ class TheSync::Analyzer
       r = result.in_groups(2)
       hash_value = fields.zip( r[0].zip(r[1]) ).to_h
       hash_value.select do |key, v|
-        v[0] != v[1] || @primary_key.include?(key)
+        v[0].to_s != v[1].to_s || @primary_key.include?(key)
       end
     end
   end
