@@ -16,10 +16,10 @@ module TheSync::ActiveRecord
     else
       _filter_columns = self.column_names - Array(options.delete(:except))
     end
-    options[:primary_key] = (options[:primary_key] || self.primary_key).to_s
-    options[:dest_primary_key] = _mappings.key?(options[:primary_key]) ? _mappings[options[:primary_key]] : options[:primary_key]
+    options[:primary_key] = Array(options[:primary_key] || self.primary_key).map { |i| i.to_s }
+    options[:dest_primary_key] = Array(options[:dest_primary_key] || options[:primary_key]).map { |i| i.to_s }
     options[:full_mappings] = _filter_columns.map { |column_name|
-      next if column_name == options[:primary_key]
+      next if options[:primary_key].include?(column_name)
       if _mappings.key?(column_name)
         [column_name, _mappings[column_name]]
       else
@@ -62,9 +62,12 @@ module TheSync::ActiveRecord
 
   def cache_all_diffs
     @syncs.flat_map do |options|
-      options[:analyzer].cache_all_diffs
+      ['update', 'insert', 'delete'].each do |action|
+        options[:analyzer].cache_diffs(action)
+      end
     end
   end
+
 
 end
 
