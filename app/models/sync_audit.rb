@@ -51,7 +51,7 @@ class SyncAudit < ApplicationRecord
   def to_apply_params
     x = {}
     audited_changes.each do |key, v|
-      if Member.columns_hash[key].type == :string
+      if synchro_model.columns_hash[key].type == :string
         x[key] = v[1].to_s
       else
         x[key] = v[1]
