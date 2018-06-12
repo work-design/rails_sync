@@ -50,7 +50,11 @@ class SyncAudit < ApplicationRecord
 
   def to_apply_params
     audited_changes.transform_values do |v|
-      v[1]
+      if Member.columns_hash[v[0]].type == :string
+        v[1].to_s
+      else
+        v[1]
+      end
     end
   end
 
