@@ -49,13 +49,16 @@ class SyncAudit < ApplicationRecord
   end
 
   def to_apply_params
-    audited_changes.transform_values do |v|
-      if Member.columns_hash[v[0]].type == :string
-        v[1].to_s
+    x = {}
+    audited_changes.each do |key, v|
+      if Member.columns_hash[key].type == :string
+        x[key] = v[1].to_s
       else
-        v[1]
+        x[key] = v[1]
       end
     end
+
+    x
   end
 
   def self.synchro_types
