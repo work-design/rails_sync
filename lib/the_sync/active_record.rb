@@ -71,6 +71,12 @@ module TheSync::ActiveRecord
     end
   end
 
+  def prepare_sync
+    @syncs.flat_map do |options|
+      options[:analyzer].reset_temp_table unless options[:analyzer].same_server?
+    end
+  end
+
 end
 
 ActiveSupport.on_load :active_record do

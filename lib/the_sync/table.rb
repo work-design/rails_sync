@@ -83,10 +83,6 @@ module TheSync
       end
     end
 
-    def migrate_sync
-      reset_temp_table
-    end
-
     def reset_temp_table
       drop_temp_table
       create_temp_table
