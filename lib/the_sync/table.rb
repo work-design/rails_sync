@@ -89,7 +89,7 @@ module TheSync
     end
 
     def create_temp_table
-      unless @dest_columns.inlude?(dest_primary_key)
+      unless @dest_columns.include?(dest_primary_key)
         @dest_columns.unshift dest_primary_key
       end
 
