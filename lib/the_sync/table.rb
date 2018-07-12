@@ -8,7 +8,7 @@ module TheSync
         @dest_table_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
       else
         # `source_table_name`
-        @dest_table_name = @dest.to_s + '_' + @table_name
+        @dest_table_name = @dest.to_s + '_' + @dest_table.to_s
       end
     end
 
