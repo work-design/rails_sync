@@ -93,7 +93,7 @@ module TheSync
         @dest_columns.unshift dest_primary_key
       end
 
-      sql = "CREATE TABLE #{@dest_table_name} (\n"
+      sql = "CREATE TABLE `#{@dest_table_name}` (\n"
       sql << dest_sql_table(only: @dest_columns)
       sql << ")"
       sql << "ENGINE=FEDERATED\n"
