@@ -62,9 +62,10 @@ module TheSync::ActiveRecord
     end
   end
 
-  def cache_all_diffs
+  def cache_all_diffs(*types)
+    types = ['update', 'insert', 'delete'] if types.blank?
     @syncs.flat_map do |options|
-      ['update', 'insert', 'delete'].each do |type|
+      types.each do |type|
         #next if !options[:primary_key].include?(self.primary_key) && type != 'update'
         options[:analyzer].cache_diffs(type)
       end
