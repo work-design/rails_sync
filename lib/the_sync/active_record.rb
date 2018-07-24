@@ -50,14 +50,14 @@ module TheSync::ActiveRecord
 
   def analyze_diffs(type = 'update')
     @syncs.flat_map do |options|
-      #next if !options[:primary_key].include?(self.primary_key) && type != 'update'
+      next if !options[:primary_key].include?(self.primary_key) && type == 'delete'
       options[:analyzer].analyze_diffs(type)
     end
   end
 
   def cache_diffs(type = 'update')
     @syncs.flat_map do |options|
-      #next if !options[:primary_key].include?(self.primary_key) && type != 'update'
+      next if !options[:primary_key].include?(self.primary_key) && type == 'delete'
       options[:analyzer].cache_diffs(type)
     end
   end
@@ -66,7 +66,7 @@ module TheSync::ActiveRecord
     types = ['update', 'insert', 'delete'] if types.blank?
     @syncs.flat_map do |options|
       types.each do |type|
-        #next if !options[:primary_key].include?(self.primary_key) && type != 'update'
+        next if !options[:primary_key].include?(self.primary_key) && type == 'delete'
         options[:analyzer].cache_diffs(type)
       end
     end
