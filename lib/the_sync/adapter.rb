@@ -1,29 +1,34 @@
 module TheSync
-  module Adapter
-    extend self
+  class Adapter
+    extend ActiveRecord::ConnectionHandling
     extend ActiveSupport::Autoload
     autoload :Base
-    autoload :Mysql
+    thread_mattr_accessor :connection_handler, instance_writer: false
 
-    def lookup(name)
-      const_get(name.to_s.camelize)
-    end
-
-    def adapter(adapter, options = {})
+    def initialize(adapter, options = {})
+      return @client if @client
       @adapter_options = TheSync.options.fetch(adapter, {})
-      adapter_class = lookup(@adapter_options[:adapter])
-      @client = adapter_class.new(@adapter_options)
-
-      #ObjectSpace.define_finalizer(self, self.class.method(:finalize))
+      @client = establish_connection(@adapter_options)
     end
 
-    def client
-      adapter.client
+    def server_id
+      begin
+        result = connection.query('select @@server_uuid')
+      rescue Mysql2::Error
+        result = connection.query('select @@server_id')
+      end
+      _id = result.to_a.flatten.first
+      if _id.is_a?(Hash)
+        _id.values.first
+      else
+        _id
+      end
     end
 
     def connection
-      adapter.connection
+      @client.connection
     end
 
+    self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
   end
 end

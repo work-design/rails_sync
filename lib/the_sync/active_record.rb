@@ -36,9 +36,9 @@ module TheSync::ActiveRecord
 
   def server_id
     begin
-      result = connection.raw_connection.query('select @@server_uuid')
+      result = connection.query('select @@server_uuid')
     rescue Mysql2::Error
-      result = connection.raw_connection.query('select @@server_id')
+      result = connection.query('select @@server_id')
     end
     _id = result.to_a.flatten.first
     if _id.is_a?(Hash)

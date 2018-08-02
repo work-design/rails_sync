@@ -5,7 +5,7 @@ module TheSync
     def instance_table
       if same_server?
         # `source.table_name`
-        @dest_table_name = @adapter.client.query_options[:database].to_s + '.' + @dest_table.to_s
+        @dest_table_name = @adapter.instance_variable_get(@adapter_options)[:database].to_s + '.' + @dest_table.to_s
       else
         # `source_table_name`
         @dest_table_name = @dest.to_s + '_' + @table_name + '-' + @dest_table.to_s
@@ -13,15 +13,15 @@ module TheSync
     end
 
     def same_server?
-      @server_id == @adapter.server_id
+      @server_id == Adapter.server_id
     end
 
     def dest_columns
-      @adapter.columns(@dest_table)
+      Adapter.connection.columns(@dest_table)
     end
 
     def dest_indexes
-      results = @adapter.indexes(@dest_table)
+      results = Adapter.connection.indexes(@dest_table)
       results = results.map { |result| { result['INDEX_NAME'] => result['COLUMN_NAME'] } }
       results.to_combined_hash  # rails_com core ext
       results.delete('PRIMARY')
@@ -29,7 +29,7 @@ module TheSync
     end
 
     def dest_primary_key
-      results = @adapter.primary_key(@dest_table)
+      results = Adapter.connection.primary_key(@dest_table)
       Hash(results[0])['COLUMN_NAME']
     end
 
