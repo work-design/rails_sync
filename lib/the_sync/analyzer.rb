@@ -3,7 +3,7 @@ class TheSync::Analyzer
   attr_reader :adapter, :my_arel_table, :dest_arel_table, :synchro_type
 
   def initialize(options = {})
-    @adapter = TheSync::Adapter.adapter(options[:dest])
+    @adapter = TheSync::Adapter.new(options[:dest])
     @dest = options[:dest]
     @record = options[:record]
     @server_id = options[:server_id]

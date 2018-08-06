@@ -1,14 +1,12 @@
 module TheSync
   class Adapter
     extend ActiveRecord::ConnectionHandling
-    extend ActiveSupport::Autoload
-    autoload :Base
     thread_mattr_accessor :connection_handler, instance_writer: false
 
     def initialize(adapter, options = {})
       return @client if @client
       @adapter_options = TheSync.options.fetch(adapter, {})
-      @client = establish_connection(@adapter_options)
+      @client = self.class.establish_connection(@adapter_options)
     end
 
     def server_id
