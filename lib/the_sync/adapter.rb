@@ -3,8 +3,6 @@ module TheSync
     extend ActiveRecord::ConnectionHandling
     mattr_accessor :connection_handler, instance_writer: false
     self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
-    puts "handler: #{self.connection_handler}"
-
 
     def initialize(adapter, options = {})
       return @client if @client
