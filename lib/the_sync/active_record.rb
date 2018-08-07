@@ -37,7 +37,7 @@ module TheSync::ActiveRecord
   def server_id
     begin
       result = connection.query('select @@server_uuid')
-    rescue Mysql2::Error
+    rescue
       result = connection.query('select @@server_id')
     end
     _id = result.to_a.flatten.first
