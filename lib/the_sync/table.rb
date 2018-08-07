@@ -29,8 +29,7 @@ module TheSync
     end
 
     def dest_primary_key
-      results = adapter.connection.primary_key(@dest_table)
-      Hash(results[0])['COLUMN_NAME']
+      adapter.connection.primary_key(@dest_table)
     end
 
     def dest_sql_table(only: [], except: [], pure: true)

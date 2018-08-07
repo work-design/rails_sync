@@ -8,6 +8,7 @@ module TheSync
       return @client if @client
       @adapter_options = TheSync.options.fetch(adapter, {})
       @client = self.class.establish_connection(@adapter_options)
+      @client.automatic_reconnect = true
     end
 
     def server_id
