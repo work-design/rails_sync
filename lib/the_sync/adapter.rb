@@ -1,7 +1,10 @@
 module TheSync
   class Adapter
     extend ActiveRecord::ConnectionHandling
-    thread_mattr_accessor :connection_handler, instance_writer: false
+    mattr_accessor :connection_handler, instance_writer: false
+    self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
+    puts "handler: #{self.connection_handler}"
+
 
     def initialize(adapter, options = {})
       return @client if @client
@@ -27,6 +30,5 @@ module TheSync
       @client.connection
     end
 
-    self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
   end
 end
