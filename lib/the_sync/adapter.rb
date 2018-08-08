@@ -8,6 +8,7 @@ module TheSync
     def initialize(adapter, options = {})
       @adapter_options = TheSync.options.fetch(adapter, {})
       @client = self.class.establish_connection(@adapter_options)
+      puts "established connection: #{@client}"
       @client.automatic_reconnect = true
     end
 
