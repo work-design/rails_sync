@@ -3,9 +3,9 @@ module TheSync
     extend ActiveRecord::ConnectionHandling
     mattr_accessor :connection_handler, instance_writer: false
     self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
+    attr_reader :client
 
     def initialize(adapter, options = {})
-      return @client if @client
       @adapter_options = TheSync.options.fetch(adapter, {})
       @client = self.class.establish_connection(@adapter_options)
       @client.automatic_reconnect = true
