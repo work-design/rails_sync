@@ -3,13 +3,16 @@ module TheSync
     extend ActiveRecord::ConnectionHandling
     mattr_accessor :connection_handler, instance_writer: false
     self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
-    attr_reader :client
 
-    def initialize(adapter, options = {})
-      @adapter_options = TheSync.options.fetch(adapter, {})
-      @client = self.class.establish_connection(@adapter_options)
+    def initialize(spec, options = {})
+      @adapter_options = TheSync.options.fetch(spec, {})
+      @adapter_options[:name] = spec
+      @client = self.class.connection_handler.establish_connection(@adapter_options)
       puts "established connection: #{@client}"
-      @client.automatic_reconnect = true
+    end
+
+    def retrieve_connection
+      self.class.connection_handler.retrieve_connection(@adapter_options[:name])
     end
 
     def server_id
@@ -27,7 +30,7 @@ module TheSync
     end
 
     def connection
-      @client.connection
+      retrieve_connection
     end
 
   end
