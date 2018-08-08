@@ -38,5 +38,9 @@ module TheSync
       retrieve_connection
     end
 
+    def url
+      @url ||= "mysql://#{@adapter_options[:username]}:#{@adapter_options[:password]}@#{@adapter_options[:host]}:#{@adapter_options[:port]}/#{@adapter_options[:database]}"
+    end
+
   end
 end

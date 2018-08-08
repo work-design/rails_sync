@@ -95,7 +95,7 @@ module TheSync
       sql << dest_sql_table(only: @dest_columns)
       sql << ")"
       sql << "ENGINE=FEDERATED\n"
-      sql << "CONNECTION='#{adapter.connection}/#{@dest_table}';"
+      sql << "CONNECTION='#{adapter.url}/#{@dest_table}';"
 
       connection.execute(sql)
     end
