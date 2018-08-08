@@ -45,12 +45,12 @@ module TheSync
       end
 
       _columns.each do |column|
-        sql << "  `#{column['COLUMN_NAME']}` #{column['COLUMN_TYPE']}"
-        sql << " COLLATE #{column['COLLATION_NAME']}" if column['COLLATION_NAME'].present?
-        sql << " NOT NULL" if column['IS_NULLABLE'] == 'NO'
-        if column['COLUMN_DEFAULT']
-          sql << " DEFAULT '#{column['COLUMN_DEFAULT']}',\n"
-        elsif column['COLUMN_DEFAULT'].nil? && column['IS_NULLABLE'] == 'YES'
+        sql << "  `#{column.name}` #{column.type}"
+        sql << " COLLATE #{column.collation}" if column.collation.present?
+        sql << " NOT NULL" if column.null.is_a?(FalseClass)
+        if column.default
+          sql << " DEFAULT '#{column.default}',\n"
+        elsif column.default.nil? && column.null
           sql << " DEFAULT NULL,\n"
         else
           sql << ",\n"
@@ -59,7 +59,7 @@ module TheSync
 
       sql << "  PRIMARY KEY (`#{dest_primary_key}`)"
 
-      _indexes = dest_indexes.reject { |_, value| (Array(value) & _columns.map { |col| col['COLUMN_NAME'] }).blank? }
+      _indexes = dest_indexes.reject { |_, value| (Array(value) & _columns.map { |col| col.name }).blank? }
 
       if _indexes.present?
         sql << ",\n"
