@@ -7,8 +7,13 @@ module TheSync
     def initialize(spec, options = {})
       @adapter_options = TheSync.options.fetch(spec, {})
       @adapter_options[:name] = spec
-      @client = self.class.connection_handler.establish_connection(@adapter_options)
-      puts "established connection: #{@client}"
+
+      begin
+        self.connection
+      rescue
+        client = self.class.connection_handler.establish_connection(@adapter_options)
+        puts "established connection: #{client}"
+      end
     end
 
     def retrieve_connection
