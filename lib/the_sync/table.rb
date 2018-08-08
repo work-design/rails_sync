@@ -22,9 +22,8 @@ module TheSync
 
     def dest_indexes
       results = adapter.connection.indexes(@dest_table)
-      results = results.map { |result| { result['INDEX_NAME'] => result['COLUMN_NAME'] } }
+      results = results.map { |result| { result.name => result.columns } }
       results.to_combined_hash  # rails_com core ext
-      results.delete('PRIMARY')
       results
     end
 
@@ -34,9 +33,9 @@ module TheSync
 
     def dest_sql_table(only: [], except: [], pure: true)
       if only.size > 0
-        _columns = dest_columns.select { |column| only.include?(column['COLUMN_NAME']) }
+        _columns = dest_columns.select { |column| only.include?(column.name) }
       else
-        _columns = dest_columns.reject { |column| except.include?(column['COLUMN_NAME']) }
+        _columns = dest_columns.reject { |column| except.include?(column.name) }
       end
 
       if pure
