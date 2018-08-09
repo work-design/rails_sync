@@ -27,6 +27,11 @@ class TheSync::Analyzer
     @record.connection
   end
 
+  def skip_analyze?(type)
+    ( type == 'delete' && !@primary_key.include?(@record.primary_key) ) ||
+      ( type == 'insert' && @record.id_insert? && !@primary_key.include?(@record.primary_key) )
+  end
+
   def cache_diffs(type = 'update')
     analyze_diffs(type).each do |diff|
       audit = SyncAudit.new synchro_type: synchro_type
@@ -43,13 +48,14 @@ class TheSync::Analyzer
       audit.audited_changes = diff
       begin
         audit.save
-      rescue ActiveRecord::ValueTooLong => e
+      rescue ActiveRecord::ValueTooLong => e # todo not require active record
         puts e.message
       end
     end
   end
 
   def analyze_diffs(type = 'update')
+    return [] if skip_analyze?(type)
     sql = fetch_diffs(type)
     results = connection.execute(sql)
     fields = results.fields.in_groups(2).first
