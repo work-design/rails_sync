@@ -25,9 +25,11 @@ class SyncAudit < ApplicationRecord
     if self.operation_update?
       _synchro = self.synchro || synchro_model.find_by(synchro_params)
       _synchro.assign_attributes to_apply_params
+      self.state = 'applied'
+      self.synchro_id = _synchro.id
       self.class.transaction do
         _synchro.save!
-        self.update! state: 'applied'
+        self.save!
       end
     elsif self.operation_delete? && self.synchro
       self.class.transaction do
