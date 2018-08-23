@@ -45,7 +45,7 @@ module TheSync
       end
 
       _columns.each do |column|
-        sql << "  `#{column.name}` #{column.type}"
+        sql << "  `#{column.name}` #{column.sql_type}"
         sql << " COLLATE #{column.collation}" if column.collation.present?
         sql << " NOT NULL" if column.null.is_a?(FalseClass)
         if column.default

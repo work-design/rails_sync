@@ -13,6 +13,7 @@ class TheSync::Analyzer
     @dest_table = options[:dest_table]
     @primary_key = options[:primary_key]
     @dest_primary_key = options[:dest_primary_key]
+    @dest_conditions = Hash(options[:dest_conditions])
 
     @full_mappings = options[:full_mappings]
     @my_columns = @primary_key + @full_mappings.map { |col| col[0] }
@@ -82,6 +83,7 @@ class TheSync::Analyzer
       query = analyze_table.join(dest_arel_table, Arel::Nodes::FullOuterJoin).on(on_conditions)
     end
 
+    query.where(where_conditions) if where_conditions.present?
     query.to_sql
   end
 
@@ -103,6 +105,15 @@ class TheSync::Analyzer
       my_arel_table[left_key].eq(dest_arel_table[@dest_primary_key[index]])
     end
     Arel::Nodes::SqlLiteral.new mappings.map(&:to_sql).join(' AND ')
+  end
+
+  def where_conditions
+    cons = @dest_conditions.map do |key, value|
+      col, meth = key.to_s.split('-')
+      dest_arel_table[col].send meth, value
+    end
+
+    Arel::Nodes::SqlLiteral.new cons.map(&:to_sql).join(' AND ')
   end
 
 end

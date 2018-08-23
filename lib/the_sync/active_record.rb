@@ -18,6 +18,7 @@ module TheSync::ActiveRecord
     end
     options[:primary_key] = Array(options[:primary_key] || self.primary_key).map { |i| i.to_s }
     options[:dest_primary_key] = Array(options[:dest_primary_key] || options[:primary_key]).map { |i| i.to_s }
+    options[:dest_conditions] = options[:dest_conditions]
     options[:full_mappings] = _filter_columns.map { |column_name|
       next if options[:primary_key].include?(column_name)
       if _mappings.key?(column_name)
