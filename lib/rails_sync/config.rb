@@ -1,6 +1,6 @@
 require 'active_support/configurable'
 
-module TheSync
+module RailsSync
   include ActiveSupport::Configurable
 
   configure do |config|

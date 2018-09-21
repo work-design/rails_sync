@@ -1,4 +1,4 @@
-# TheSync
+# RailsSync
 
 This tools allow sync one way two tables one the moment, dont use BINLOG, compare
 every row beetwen tables with MD5 algorithm to search changes, before create DML
@@ -15,7 +15,7 @@ sentences to equal same tables.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'the_sync'
+gem 'rails_sync'
 ```
 
 And then execute:
@@ -25,11 +25,11 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install the_sync
+$ gem install rails_sync
 ```
 
 ## Warning
-* Source table and destined table must have same Primary Key value, `the_sync` use primary key to as ID.
+* Source table and destined table must have same Primary Key value, `rails_sync` use primary key to as ID.
 
 
 ## Contributing

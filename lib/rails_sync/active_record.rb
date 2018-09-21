@@ -1,8 +1,8 @@
-require 'the_sync/adapter'
-require 'the_sync/table'
-require 'the_sync/analyzer'
+require 'rails_sync/adapter'
+require 'rails_sync/table'
+require 'rails_sync/analyzer'
 
-module TheSync::ActiveRecord
+module RailsSync::ActiveRecord
   # source
   # source_client
   # dest_table
@@ -29,9 +29,9 @@ module TheSync::ActiveRecord
     }.compact
 
     options[:server_id] = self.server_id
-    options[:analyzer] = TheSync::Analyzer.new(record: self, **options)
+    options[:analyzer] = RailsSync::Analyzer.new(record: self, **options)
 
-    TheSync.synchro_types << self.name
+    RailsSync.synchro_types << self.name
     @syncs << options
   end
 
@@ -83,5 +83,5 @@ module TheSync::ActiveRecord
 end
 
 ActiveSupport.on_load :active_record do
-  extend TheSync::ActiveRecord
+  extend RailsSync::ActiveRecord
 end

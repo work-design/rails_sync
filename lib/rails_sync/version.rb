@@ -1,3 +1,3 @@
-module TheSync
+module RailsSync
   VERSION = '0.1.0'
 end

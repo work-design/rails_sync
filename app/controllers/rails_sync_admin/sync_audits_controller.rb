@@ -1,10 +1,10 @@
-class TheSyncAdmin::SyncAuditsController < TheSyncAdmin::BaseController
+class RailsSyncAdmin::SyncAuditsController < RailsSyncAdmin::BaseController
   before_action :set_sync_audit, only: [:show, :apply, :destroy]
 
   def index
     q_params = params.permit(:synchro_type, :state, :operation)
     @sync_audits = SyncAudit.default_where(q_params).order(id: :desc).page(params[:page])
-    @synchro_types = TheSync.synchro_types.uniq | SyncAudit.synchro_types
+    @synchro_types = RailsSync.synchro_types.uniq | SyncAudit.synchro_types
   end
 
   def sync

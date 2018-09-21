@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    the_sync (0.1.0)
+    rails_sync (0.1.0)
       rails (~> 5.0)
 
 GEM
@@ -122,7 +122,7 @@ PLATFORMS
 DEPENDENCIES
   mysql2
   rails (>= 5.2.0)
-  the_sync!
+  rails_sync!
 
 BUNDLED WITH
    1.16.3

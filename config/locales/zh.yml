@@ -1,5 +1,5 @@
 zh:
-  the_sync_admin:
+  rails_sync_admin:
   activerecord:
     attributes:
       sync_audit/state:

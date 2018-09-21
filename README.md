@@ -1,4 +1,4 @@
-# TheSync
+# RailsSync
 
 * [English](./README.en.md)
 

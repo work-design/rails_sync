@@ -1,9 +1,9 @@
-class TheSync::Analyzer
-  include TheSync::Table
+class RailsSync::Analyzer
+  include RailsSync::Table
   attr_reader :adapter, :my_arel_table, :dest_arel_table, :synchro_type
 
   def initialize(options = {})
-    @adapter = TheSync::Adapter.new(options[:dest])
+    @adapter = RailsSync::Adapter.new(options[:dest])
     @dest = options[:dest]
     @record = options[:record]
     @server_id = options[:server_id]

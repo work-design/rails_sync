@@ -1,0 +1,31 @@
+default: &default
+  db1:
+    adapter: mysql2
+    host: localhost
+    port: 3306
+    username: root
+    password: root123_ROOT
+    database: employee_test
+  db2:
+    adapter: mysql2
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: root123_ROOT
+    database: employee_test
+    reconnect: true
+    connect_timeout: 6
+
+development:
+  <<: *default
+
+staging:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+

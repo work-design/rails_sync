@@ -1,11 +1,11 @@
-module TheSync
+module RailsSync
   class Adapter
     extend ActiveRecord::ConnectionHandling
     mattr_accessor :connection_handler, instance_writer: false
     self.connection_handler = ActiveRecord::ConnectionAdapters::ConnectionHandler.new
 
     def initialize(spec, options = {})
-      @adapter_options = TheSync.options.fetch(spec, {})
+      @adapter_options = RailsSync.options.fetch(spec, {})
       @adapter_options[:name] = spec
 
       begin

@@ -1,4 +1,4 @@
-module TheSync
+module RailsSync
   module Table
     attr_reader :dest_table_name
 
