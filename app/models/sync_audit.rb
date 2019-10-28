@@ -40,7 +40,7 @@ class SyncAudit < ApplicationRecord
       _synchro = synchro_model.find_or_initialize_by(synchro_params)
       _synchro.assign_attributes to_apply_params
       self.class.transaction do
-        _synchro.save_sneakily!
+        _synchro.method(:create_or_update).super_method.call
         self.update! synchro_id: _synchro.id, state: 'applied'
       end
     end
