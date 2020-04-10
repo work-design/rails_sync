@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.version = RailsSync::VERSION
   s.authors = ['qinmingyuan']
   s.email = ['mingyuan0715@foxmail.com']
-  s.homepage = 'https://github.com/yougexiangfa/rails_sync'
-  s.summary = "Summary of RailsSync."
-  s.description = "Description of RailsSync."
-  s.license = "LGPL-3.0"
+  s.homepage = 'https://github.com/work-design/rails_sync'
+  s.summary = 'Summary of RailsSync.'
+  s.description = 'Description of RailsSync.'
+  s.license = 'LGPL-3.0'
 
   s.files = Dir[
     '{app,config,db,lib}/**/*',
@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
     'README.md'
   ]
 
-  s.add_dependency 'rails', '>= 5.0', '<= 6.0'
+  s.add_dependency 'rails_com', '~> 1.2'
 end
