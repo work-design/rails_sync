@@ -1,8 +1,8 @@
 zh:
-  rails_sync_admin:
   activerecord:
-    attributes:
-      sync_audit/state:
-        init: Init
-        applied: 已修改
-        finished: 完成
+    enum:
+      sync/audit:
+        state:
+          init: 默认
+          applied: 已修改
+          finished: 完成
