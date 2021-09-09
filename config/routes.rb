@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
 
-  scope :admin, module: 'sync/admin', as: 'admin' do
-    resources :sync_audits do
-      post :sync, on: :collection
-      post :batch, on: :collection
-      patch :apply, on: :member
+  namespace :sync, defaults: { business: 'sync' } do
+    namespace :admin, defaults: { namespace: 'admin' } do
+      resources :audits do
+        post :sync, on: :collection
+        post :batch, on: :collection
+        patch :apply, on: :member
+      end
     end
   end
 

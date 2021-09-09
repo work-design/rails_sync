@@ -1,0 +1,20 @@
+<td><%= model.id %></td>
+<td>
+  <p><%= model.synchro_type %></p>
+  <p><%= model.synchro_id %></p>
+</td>
+<td><%= simple_format(model.synchro_params) %></td>
+<td><%= model.operation_i18n %></td>
+<td><%= simple_format_hash model.audited_changes %></td>
+<td>
+  <span class="tag"><%= model.state_i18n %></span>
+  <% unless model.applied? %>
+    <%= link_to 'apply', apply_admin_model_path(model), method: :patch, data: { confirm: t('.confirm') }, class: 'ui yellow label' %>
+  <% end %>
+  <%= link_to admin_model_path(model), class: 'ui mini blue icon button' do %>
+    <i class="pencil alternate icon"></i>
+  <% end %>
+  <%= link_to admin_model_path(model), method: :delete, data: { confirm: t('.confirm') }, class: 'ui mini red icon button' do %>
+    <i class="times icon"></i>
+  <% end %>
+</td>

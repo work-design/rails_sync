@@ -1,0 +1,13 @@
+<th><%= Sync::Audit.human_attribute_name(:id) %></th>
+<th>
+  <p><%= Sync::Audit.human_attribute_name(:synchro_type) %></p>
+  <p><%= Sync::Audit.human_attribute_name(:synchro_id) %></p>
+</th>
+<th>
+  <%= Sync::Audit.human_attribute_name(:synchro_params) %>
+</th>
+<th><%= Sync::Audit.human_attribute_name(:action) %></th>
+<th><%= Sync::Audit.human_attribute_name(:audited_changes) %></th>
+<th>
+  <%= Sync::Audit.human_attribute_name(:state) %>
+</th>

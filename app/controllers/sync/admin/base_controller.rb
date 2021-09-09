@@ -1,4 +1,5 @@
-class RailsSyncAdmin::BaseController < RailsSync.config.admin_class.constantize
+module Sync
+  class BaseController < AdminController
 
-
+  end
 end
