@@ -1,5 +1,5 @@
-module Sync::Model
-  module Audit
+module Sync
+  module Model::Audit
     extend ActiveSupport::Concern
 
     included do

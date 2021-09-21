@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/qinmingyuan/viter.git
-  revision: a6c36456e695b32d427179c1bfc1c0df2c66792c
+  revision: 82d46c2eed89cc27b89811e3ded0cb6797f3b807
   specs:
     viter (0.1)
       rails
 
 GIT
   remote: https://github.com/work-design/rails_com.git
-  revision: 8949509c4f26ecf76adecfdbb2e221535ee47ac0
+  revision: 2377ede7104b675247bf7b26bc279591d54d0a21
   specs:
     rails_com (1.2.9)
       acme-client
@@ -16,30 +16,31 @@ GIT
       default_where (~> 2.2)
       http-form_data (~> 2.3)
       httpx (~> 0.16)
+      jbuilder
       kaminari
       rails (>= 6.1)
       rails_extend
       turbo-rails
 
 GIT
-  remote: https://github.com/work-design/rails_extend.git
-  revision: 48e8b20f65097c981b8ecc3b9b35d2082512d9e8
+  remote: https://github.com/work-design/rails_design.git
+  revision: 383e4a7423663c8233b14d1eeaec2507569310ca
   specs:
-    rails_extend (1.0.0)
-      rails (>= 6.0)
+    rails_design (0.0.1)
+      rails
 
 GIT
-  remote: https://github.com/work-design/rails_ui.git
-  revision: c8d7bfe6d598c9433373e4e8c0e7c17ebc98b17a
+  remote: https://github.com/work-design/rails_extend.git
+  revision: c51aad1277fff57c53409a2c4c6c4e90461463d5
   specs:
-    rails_ui (0.0.1)
-      rails
+    rails_extend (1.0.0)
+      rails (>= 5.0)
 
 PATH
   remote: .
   specs:
     rails_sync (0.1)
-      rails_com (~> 1.2)
+      rails_extend
 
 GEM
   remote: https://rubygems.org/
@@ -114,13 +115,13 @@ GEM
       with_advisory_lock (>= 4.0.0)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
-    debug (1.0.0)
+    debug (1.1.0)
       irb
       reline (>= 0.2.7)
     default_where (2.3.0)
       activerecord (>= 4.0, <= 7.0)
     erubi (1.10.0)
-    faraday (1.7.1)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -170,7 +171,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.1)
+    marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.1)
     mini_portile2 (2.6.1)
@@ -181,7 +182,7 @@ GEM
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     pg (1.2.3)
-    puma (5.4.0)
+    puma (5.5.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -229,7 +230,7 @@ GEM
       sprockets (>= 3.0.0)
     thor (1.1.0)
     timers (4.3.3)
-    turbo-rails (0.7.11)
+    turbo-rails (0.7.14)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -245,15 +246,14 @@ PLATFORMS
 
 DEPENDENCIES
   amazing_print
-  debug (>= 1.0.0.rc)
-  jbuilder
+  debug
   pg
   puma
   rails
   rails_com!
+  rails_design!
   rails_extend!
   rails_sync!
-  rails_ui!
   sdoc
   viter!
 
