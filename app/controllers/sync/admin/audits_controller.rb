@@ -1,5 +1,5 @@
-module Sync::Admin
-  class AuditsController < BaseController
+module Sync
+  class Admin::AuditsController < Admin::BaseController
     before_action :set_audit, only: [:show, :apply, :destroy]
 
     def index
