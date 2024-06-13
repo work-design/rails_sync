@@ -1,6 +1,4 @@
 require 'rails_sync/engine'
-require 'rails_sync/config'
-
 require 'rails_sync/active_record'
 require 'rails_sync/adapter'
 

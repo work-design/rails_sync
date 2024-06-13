@@ -14,17 +14,17 @@ module Sync
       belongs_to :operator, polymorphic: true, optional: true
       belongs_to :destined
 
-      enum state: {
+      enum :state, {
         init: 'init',
         applied: 'applied',
         finished: 'finished'
-      }, _default: 'init'
+      }, default: 'init'
 
-      enum operation: {
+      enum :operation, {
         update: 'update',
         delete: 'delete',
         insert: 'insert'
-      }, _prefix: true
+      }, prefix: true
     end
 
     def apply_changes
