@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Qingflow
+module Sync
   module Model::Form
     extend ActiveSupport::Concern
 

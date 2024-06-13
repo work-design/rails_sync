@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Qingflow
+module Sync
   module Model::Log
     extend ActiveSupport::Concern
 
