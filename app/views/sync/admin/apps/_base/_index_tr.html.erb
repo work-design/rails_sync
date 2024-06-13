@@ -13,9 +13,13 @@
       <% end %>
     </div>
     <div data-show-target="item" class="visibility-hidden">
-      <%= link_to({ controller: 'applications', app_id: model.id }, class: 'button is-small is-rounded is-primary') do %>
+      <%= link_to({ controller: 'forms', app_id: model.id }, class: 'button is-small is-rounded is-primary') do %>
         <i class="fa-solid fa-list"></i>
-        <span class="ml-1"><%= t('.applications.index.title') %></span>
+        <span class="ml-1"><%= t('.forms.index.title') %></span>
+      <% end %>
+      <%= link_to({ controller: 'items', app_id: model.id }, class: 'button is-small is-rounded is-success') do %>
+        <i class="fa-solid fa-list"></i>
+        <span class="ml-1"><%= t('.items.index.title') %></span>
       <% end %>
     </div>
   </td>

@@ -1,0 +1,12 @@
+zh:
+  sync:
+    admin:
+      apps:
+        index:
+          title: 应用
+      forms:
+        index:
+          title: 数据结构
+      items:
+        index:
+          title: 数据条目
