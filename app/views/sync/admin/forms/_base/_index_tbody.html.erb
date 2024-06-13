@@ -1,0 +1,27 @@
+<td>
+  <p><%= model.title %></p>
+  <p class="color-grey"><%= model.queid %></p>
+</td>
+<td><%= model.que_type_i18n %></td>
+<td>
+  <p><%= model.meta_column&.record_name %></p>
+  <p><%= model.meta_column&.column_name %></p>
+</td>
+<td>
+  <%= form_with theme: nil, model: model, url: { action: 'update', id: model.id }, data: { controller: 'input' } do |f| %>
+    <%= f.check_box :display, data: { input_target: 'checkbox' }, id: nil, class: 'switch is-rounded' %>
+    <label data-action="click->input#check"></label>
+  <% end %>
+</td>
+<td>
+  <%= form_with theme: nil, model: model, url: { action: 'update', id: model.id }, data: { controller: 'input' } do |f| %>
+    <%= f.check_box :primary, data: { input_target: 'checkbox' }, id: nil, class: 'switch is-rounded' %>
+    <label data-action="click->input#check"></label>
+  <% end %>
+</td>
+<td>
+  <%= form_with theme: nil, model: model, url: { action: 'update', id: model.id }, data: { controller: 'input' } do |f| %>
+    <%= f.check_box :modeling, data: { input_target: 'checkbox' }, id: nil, class: 'switch is-rounded' %>
+    <label data-action="click->input#check"></label>
+  <% end %>
+</td>

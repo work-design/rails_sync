@@ -1,0 +1,16 @@
+<div>
+  <dt><%= Qingflow::Log.human_attribute_name(:related_type) %></dt>
+  <dd><%= @log.related_type %></dd>
+</div>
+<div>
+  <dt><%= Qingflow::Log.human_attribute_name(:related_id) %></dt>
+  <dd><%= @log.related_id %></dd>
+</div>
+<div>
+  <dt><%= Qingflow::Log.human_attribute_name(:exception) %></dt>
+  <dd><%= @log.exception %></dd>
+</div>
+<div>
+  <dt><%= Qingflow::Log.human_attribute_name(:exception_backtrace) %></dt>
+  <dd><%= simple_format @log.exception_backtrace %></dd>
+</div>

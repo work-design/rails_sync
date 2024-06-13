@@ -1,0 +1,3 @@
+<div id="business_wrapper" class="field is-horizontal">
+  <%= f.collection_select :meta_business, Com::MetaBusiness.all, :identifier, :name, { all: { select: nil } }, data: { controller: 'input', action: 'input#link', input_method_value: 'POST', input_url_value: url_for(controller: 'com/panel/meta_models', action: 'options', dom_id: 'business_wrapper', dom_scope: 'form') } %>
+</div>

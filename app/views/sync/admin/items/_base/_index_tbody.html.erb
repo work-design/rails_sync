@@ -1,0 +1,4 @@
+<td><%= model.applyid %></td>
+<% @application.display_forms.each do |form| %>
+  <td><%= model.answers_hash[form.queid] %></td>
+<% end %>
