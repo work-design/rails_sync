@@ -7,6 +7,23 @@ Rails.application.routes.draw do
         post :batch, on: :collection
         patch :apply, on: :member
       end
+      resources :apps do
+        resources :forms do
+          collection do
+            post :sync
+          end
+        end
+        resources :items do
+          collection do
+            post :sync
+          end
+          member do
+            post :refresh
+          end
+          resources :logs
+        end
+      end
+
     end
   end
 
