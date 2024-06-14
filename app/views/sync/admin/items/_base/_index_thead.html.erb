@@ -1,4 +1,4 @@
 <th><%= Sync::Item.human_attribute_name(:id) %></th>
-<% @record.display_forms.each do |form| %>
-  <th><%= form.title %></th>
+<% @record.forms.each do |form| %>
+  <th><%= form.name %></th>
 <% end %>

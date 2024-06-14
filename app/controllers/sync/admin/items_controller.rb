@@ -4,7 +4,7 @@ module Sync
     before_action :set_item, only: [:show, :edit, :update, :destroy, :actions, :refresh]
 
     def index
-      @items = @record.items.order(recordlyid: :desc).page(params[:page])
+      @items = @record.items.order(id: :desc).page(params[:page])
     end
 
     def sync
