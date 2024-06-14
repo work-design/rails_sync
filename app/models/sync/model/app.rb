@@ -15,9 +15,7 @@ module Sync
 
       belongs_to :organ, class_name: 'Org::Organ', optional: true
 
-      has_many :forms
-      has_many :display_forms, -> { display }, class_name: 'Form'
-      has_many :items
+      has_many :records
     end
 
     def oauth_url

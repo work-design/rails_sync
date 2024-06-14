@@ -11,19 +11,21 @@ Rails.application.routes.draw do
         patch :apply, on: :member
       end
       resources :apps do
-        resources :forms do
-          collection do
-            post :sync
+        resources :records do
+          resources :forms do
+            collection do
+              post :sync
+            end
           end
-        end
-        resources :items do
-          collection do
-            post :sync
+          resources :items do
+            collection do
+              post :sync
+            end
+            member do
+              post :refresh
+            end
+            resources :logs
           end
-          member do
-            post :refresh
-          end
-          resources :logs
         end
       end
 

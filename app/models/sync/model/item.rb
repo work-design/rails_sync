@@ -11,7 +11,7 @@ module Sync
       attribute :source, :string
 
       belongs_to :organ, class_name: 'Org::Organ', optional: true
-      belongs_to :app
+      belongs_to :record
 
       has_many :forms, primary_key: :app_id, foreign_key: :app_id
       has_many :logs

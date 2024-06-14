@@ -15,7 +15,7 @@ module Sync
       attribute :modeling, :boolean
 
       belongs_to :organ, class_name: 'Org::Organ', optional: true
-      belongs_to :app
+      belongs_to :record
 
       belongs_to :meta_model, class_name: 'Com::MetaModel', foreign_key: :record_name, primary_key: :record_name, optional: true
       belongs_to :meta_column, class_name: 'Com::MetaColumn', optional: true
