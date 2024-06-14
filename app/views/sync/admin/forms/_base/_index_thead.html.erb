@@ -1,9 +1,12 @@
 <th>
-  <p><%= Qingflow::Form.human_attribute_name(:title) %></p>
-  <p><%= Qingflow::Form.human_attribute_name(:queid) %></p>
+  <p><%= Sync::Form.human_attribute_name(:external_record_name) %></p>
+  <p><%= Sync::Form.human_attribute_name(:external_column_name) %></p>
 </th>
-<th><%= Qingflow::Form.human_attribute_name(:que_type) %></th>
-<th><%= Qingflow::Form.human_attribute_name(:meta_column_id) %></th>
+<th><%= Sync::Form.human_attribute_name(:name) %></th>
+<th>
+  <p><%= Sync::Form.human_attribute_name(:record_name) %></p>
+  <p><%= Sync::Form.human_attribute_name(:column_name) %></p>
+</th>
 <th><%= Qingflow::Form.human_attribute_name(:display) %></th>
 <th><%= Qingflow::Form.human_attribute_name(:primary) %></th>
 <th><%= Qingflow::Form.human_attribute_name(:modeling) %></th>

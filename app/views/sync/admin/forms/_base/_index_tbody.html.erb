@@ -1,11 +1,11 @@
 <td>
-  <p><%= model.title %></p>
-  <p class="color-grey"><%= model.queid %></p>
+  <p><%= model.external_record_name %></p>
+  <p><%= model.external_column_name %></p>
 </td>
-<td><%= model.que_type_i18n %></td>
+<td><%= model.name %></td>
 <td>
-  <p><%= model.meta_column&.record_name %></p>
-  <p><%= model.meta_column&.column_name %></p>
+  <p><%= model.record_name %></p>
+  <p><%= model.column_name %></p>
 </td>
 <td>
   <%= form_with theme: nil, model: model, url: { action: 'update', id: model.id }, data: { controller: 'input' } do |f| %>
