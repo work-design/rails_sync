@@ -1,18 +1,18 @@
 module Sync
   class Admin::FormsController < Admin::BaseController
-    before_action :set_app
+    before_action :set_record
 
     def index
-      @forms = @app.forms.roots.page(params[:page])
+      @forms = @record.forms.roots.page(params[:page])
     end
 
     def sync
-      @app.sync_forms!
+      @record.sync_forms!
     end
 
     private
-    def set_app
-      @app = App.find params[:app_id]
+    def set_record
+      @record = Record.find params[:record_id]
     end
 
   end

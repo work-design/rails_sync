@@ -1,14 +1,14 @@
 module Sync
   class Admin::ItemsController < Admin::BaseController
-    before_action :set_app
+    before_action :set_record
     before_action :set_item, only: [:show, :edit, :update, :destroy, :actions, :refresh]
 
     def index
-      @items = @app.items.order(applyid: :desc).page(params[:page])
+      @items = @record.items.order(recordlyid: :desc).page(params[:page])
     end
 
     def sync
-      @app.sync_items!
+      @record.sync_items!
     end
 
     def refresh
@@ -16,12 +16,12 @@ module Sync
     end
 
     private
-    def set_app
-      @app = App.find params[:app_id]
+    def set_record
+      @record = Record.find params[:record_id]
     end
 
     def set_item
-      @item = @app.items.find params[:id]
+      @item = @record.items.find params[:id]
     end
 
   end

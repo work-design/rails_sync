@@ -2,10 +2,10 @@
   <%= yield %>
   <td>
     <div data-show-target="item" class="visibility-hidden">
-      <%= button_to({ action: 'show', id: model.id }, aria: { label: t('.show.title') }, class: 'button is-small is-rounded is-light') do %>
+      <%= button_to({ action: 'show', id: model.id }, data: { turbo_frame: 'modal' }, aria: { label: t('.show.title') }, class: 'button is-small is-rounded is-light') do %>
         <i class="fa-solid fa-circle-info has-text-info"></i>
       <% end %>
-      <%= button_to({ action: 'edit', id: model.id }, aria: { label: t('.edit.title') }, class: 'button is-small is-rounded is-light') do %>
+      <%= button_to({ action: 'edit', id: model.id }, data: { turbo_frame: 'modal' }, aria: { label: t('.edit.title') }, class: 'button is-small is-rounded is-light') do %>
         <i class="fa-solid fa-pencil has-text-link"></i>
       <% end %>
       <%= button_to({ action: 'destroy', id: model.id }, method: :delete, aria: { label: t('.destroy.title') }, class: 'button is-small is-rounded is-light', form: { data: { turbo_confirm: t('.confirm') } }) do %>
@@ -13,9 +13,13 @@
       <% end %>
     </div>
     <div data-show-target="item" class="visibility-hidden">
-      <%= link_to({ controller: 'records', app_id: model.id }, class: 'button is-small is-rounded is-primary') do %>
+      <%= link_to({ controller: 'forms', record_id: model.id }, class: 'button is-small is-rounded is-primary') do %>
         <i class="fa-solid fa-list"></i>
-        <span class="ml-1"><%= t('.records.index.title') %></span>
+        <span class="ml-1"><%= t('.forms.index.title') %></span>
+      <% end %>
+      <%= link_to({ controller: 'items', record_id: model.id }, class: 'button is-small is-rounded is-success') do %>
+        <i class="fa-solid fa-list"></i>
+        <span class="ml-1"><%= t('.items.index.title') %></span>
       <% end %>
     </div>
   </td>
