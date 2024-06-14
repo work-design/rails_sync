@@ -18,7 +18,7 @@ module Sync
 
     def record_params
       params.fetch(:record, {}).permit(
-        :key
+        :name
       )
     end
 

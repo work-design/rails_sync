@@ -1,3 +1,4 @@
 <li><%= link_to t('.apps.index.title'), { controller: 'apps' } %></li>
-<li><span class="mx-3"><%= @app.name %></span></li>
+<li><%= link_to t('.records.index.title'), { controller: 'records' } %></li>
+<li><span class="mx-3"><%= @record.name %></span></li>
 <li class="is-active"><%= t('.title') %></li>
