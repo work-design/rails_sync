@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :items
 
     namespace :admin, defaults: { namespace: 'admin' } do
+      root 'home#index'
       resources :audits do
         post :sync, on: :collection
         post :batch, on: :collection
