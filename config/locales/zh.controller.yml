@@ -11,3 +11,6 @@ zh:
       items:
         index:
           title: 数据条目
+      records:
+        index:
+          title: 模型

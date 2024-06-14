@@ -10,7 +10,7 @@ module Sync
     def create
       raw_params.each do |record_name, columns|
         record = @app.records.find_or_initialize_by(key: record_name)
-        columns.each do |column|
+        columns.each do |column, value|
           record.forms.find_or_initialize_by(external_column_name: column)
         end
         record.save
