@@ -1,4 +1,4 @@
 <td><%= model.id %></td>
-<% model.values.each do |_, value| %>
-  <td><%= value %></td>
+<% @record.display_forms.each do |form| %>
+  <td><%= model.values[form.external_column_name] %></td>
 <% end %>
