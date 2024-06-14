@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
 
   namespace :sync, defaults: { business: 'sync' } do
-    resources :items
+    resources :items, only: [:index, :create] do
+      collection do
+        match '/' => :update, via: [:put, :patch]
+      end
+    end
 
     namespace :admin, defaults: { namespace: 'admin' } do
       root 'home#index'
