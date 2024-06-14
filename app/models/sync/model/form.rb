@@ -24,12 +24,12 @@ module Sync
       scope :primary, -> { where(primary: true) }
       scope :modeling, -> { where(modeling: true) }
 
-      before_validation :sync_organ, if: -> { new_record? || app_id_changed? }
+      before_validation :sync_organ, if: -> { new_record? || record_id_changed? }
       before_validation :sync_app, if: -> { parent.present? || parent_id_changed? }
     end
 
     def sync_organ
-      self.organ_id = app.organ_id
+      self.organ_id = record.organ_id if record
     end
 
     def sync_app

@@ -16,20 +16,10 @@ module Sync
       has_many :items
 
       before_validation :sync_organ, if: -> { new_record? || app_id_changed? }
-      after_save_commit :sync_app!, if: -> { saved_change_to_key? }
     end
 
     def sync_organ
-      self.organ_id = app.organ_id
-    end
-
-    def sync_app!
-      r = app.api.app(key)
-      info = r['result'][0]
-      if info
-        self.name = info['appName']
-        self.save
-      end
+      self.organ_id = app.organ_id if app
     end
 
     def form(**options)

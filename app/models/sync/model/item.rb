@@ -13,14 +13,14 @@ module Sync
       belongs_to :organ, class_name: 'Org::Organ', optional: true
       belongs_to :record
 
-      has_many :forms, primary_key: :app_id, foreign_key: :app_id
+      has_many :forms, primary_key: :record_id, foreign_key: :record_id
       has_many :logs
 
-      before_validation :sync_organ, if: -> { new_record? || app_id_changed? }
+      before_validation :sync_organ, if: -> { new_record? || record_id_changed? }
     end
 
     def sync_organ
-      self.organ_id = app.organ_id
+      self.organ_id = record.organ_id if record
     end
 
     def answers_hash
