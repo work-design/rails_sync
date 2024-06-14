@@ -5,13 +5,14 @@ module Sync
     extend ActiveSupport::Concern
 
     included do
-      attribute :title, :string
+      attribute :name, :string
       attribute :column_name, :string
       attribute :record_name, :string
+      attribute :external_column_name, :string
+      attribute :external_record_name, :string
       attribute :display, :boolean
       attribute :primary, :boolean
       attribute :modeling, :boolean
-      attribute :foreign_key, :string
 
       belongs_to :organ, class_name: 'Org::Organ', optional: true
       belongs_to :app
