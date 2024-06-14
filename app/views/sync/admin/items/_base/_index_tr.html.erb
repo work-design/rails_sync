@@ -17,9 +17,9 @@
         <i class="fa-solid fa-list"></i>
         <span class="ml-1"><%= t('.logs.index.title') %></span>
       <% end %>
-      <%= button_to({ action: 'refresh', id: model.id }, class: 'button is-small is-rounded is-warning') do %>
+      <%= button_to({ action: 'migrate', id: model.id }, class: 'button is-small is-rounded is-warning') do %>
         <i class="fa-solid fa-rotate"></i>
-        <span class="ml-1"><%= t('.refresh.title') %></span>
+        <span class="ml-1"><%= t('.migrate.title') %></span>
       <% end %>
     </div>
   </td>

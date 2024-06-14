@@ -11,6 +11,8 @@ zh:
       items:
         index:
           title: 数据条目
+        migrate:
+          title: 同步至本系统
       records:
         index:
           title: 模型

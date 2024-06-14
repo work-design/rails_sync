@@ -23,6 +23,7 @@ Rails.application.routes.draw do
             end
             member do
               post :refresh
+              post :migrate
             end
             resources :logs
           end
