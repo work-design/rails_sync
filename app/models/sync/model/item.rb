@@ -25,7 +25,9 @@ module Sync
     end
 
     def sync_forms
-
+      values.keys.each do |key|
+        forms.find_or_create_by(external_column_name: key)
+      end
     end
 
     def answers_hash
