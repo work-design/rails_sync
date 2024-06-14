@@ -17,10 +17,15 @@ module Sync
       has_many :logs
 
       before_validation :sync_organ, if: -> { new_record? || record_id_changed? }
+      after_save_commit :sync_forms, if: -> { saved_change_to_values? }
     end
 
     def sync_organ
       self.organ_id = record.organ_id if record
+    end
+
+    def sync_forms
+
     end
 
     def answers_hash

@@ -26,6 +26,7 @@ module Sync
 
       before_validation :sync_organ, if: -> { new_record? || record_id_changed? }
       before_validation :sync_app, if: -> { parent.present? || parent_id_changed? }
+      before_validation :sync_column, if: -> { meta_column_id_changed? }
     end
 
     def sync_organ
@@ -34,6 +35,10 @@ module Sync
 
     def sync_app
       self.app = parent.app if parent
+    end
+
+    def sync_column
+      self.column_name = meta_column.column_name if self.meta_column
     end
 
   end
