@@ -12,6 +12,7 @@ module Sync
       attribute :access_token_expires_at, :datetime
       attribute :refresh_token, :string
       attribute :refresh_token_expires_at, :datetime
+      attribute :base_url, :string
 
       belongs_to :organ, class_name: 'Org::Organ', optional: true
 

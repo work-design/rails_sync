@@ -30,7 +30,8 @@ module Sync
       params.fetch(:app, {}).permit(
         :name,
         :appid,
-        :secret
+        :secret,
+        :base_url
       )
     end
 

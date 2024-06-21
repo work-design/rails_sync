@@ -1,12 +1,16 @@
 <div>
-  <dt><%= Qingflow::App.human_attribute_name(:name) %></dt>
+  <dt><%= Sync::App.human_attribute_name(:name) %></dt>
   <dd><%= @app.name %></dd>
 </div>
 <div>
-  <dt><%= Qingflow::App.human_attribute_name(:appid) %></dt>
+  <dt><%= Sync::App.human_attribute_name(:appid) %></dt>
   <dd><%= @app.appid %></dd>
 </div>
 <div>
-  <dt><%= Qingflow::App.human_attribute_name(:secret) %></dt>
+  <dt><%= Sync::App.human_attribute_name(:secret) %></dt>
   <dd><%= @app.secret %></dd>
+</div>
+<div>
+  <dt><%= Sync::App.human_attribute_name(:base_url) %></dt>
+  <dd><%= @app.base_url %></dd>
 </div>
