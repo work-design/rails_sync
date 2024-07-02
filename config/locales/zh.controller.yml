@@ -2,6 +2,9 @@ zh:
   sync:
     admin:
       title: 数据集成
+      home:
+        index:
+          title: 数据集成
       apps:
         index:
           title: 应用
