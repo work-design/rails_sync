@@ -1,3 +1,4 @@
+<%= f.select :type, options_for_select(Sync::App.options_i18n(:type), f.object.type) %>
 <%= f.text_field :name %>
 <%= f.text_field :appid %>
 <%= f.text_field :secret %>

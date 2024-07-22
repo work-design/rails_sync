@@ -6,3 +6,7 @@ zh:
           init: 默认
           applied: 已修改
           finished: 完成
+      sync/app:
+        type:
+          Sync::AliyunApp: 阿里云
+          Sync::XfyunApp: 讯飞
