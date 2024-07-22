@@ -15,19 +15,23 @@ class AliOcr
     )
   end
 
-  def records
+  def ocr(url = 'https://test.work.design/shurui2.jpg')
     body = {
-      action: 'DescribeDomainRecords'
-    }
-    body.merge! params: {
-      DomainName: root_domain
+      action: 'PredictClassifierModel'
     }
     body.merge! opts: {
       method: 'POST',
       timeout: 15000
     }
+    body.merge! params: {
+      ClassifierId: 215,
+      Content: url
+    }
 
-    client.request(**body)
+    r = client.request(**body)
+    r.dig('Data', 'data').map do |i|
+      [i['fieldName'], i['fieldWordRaw']]
+    end.to_h
   end
 
 

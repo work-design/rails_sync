@@ -4,7 +4,7 @@ module Sync
 
     def api
       return @api if defined? @api
-      @api = AliOcr.new(appid, sceret)
+      @api = AliOcr.new(appid, secret)
     end
 
   end
