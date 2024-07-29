@@ -15,7 +15,7 @@ class AliOcr
     )
   end
 
-  def ocr(url = 'https://test.work.design/shurui2.jpg')
+  def ocr(class_id: 223, url: 'https://test.work.design/shurui2.jpg')
     body = {
       action: 'PredictClassifierModel'
     }
@@ -24,7 +24,7 @@ class AliOcr
       timeout: 15000
     }
     body.merge! params: {
-      ClassifierId: 215,
+      ClassifierId: class_id,
       Content: url
     }
 
