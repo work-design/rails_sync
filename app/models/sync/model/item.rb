@@ -31,18 +31,7 @@ module Sync
     end
 
     def answers_hash
-      r = {}
-      answers.each do |answer|
-        if answer['values'].present?
-          r[answer['queId']] = answer['values'][0]['value']
-        elsif answer['tableValues'].present?
-          r[answer['queId']] = answer['tableValues'].map do |table|
-            table.map(&->(i){ [i['queId'], i['values'][0]['value']] }).to_h
-          end
-        end
-      end
 
-      r
     end
 
     def answers_with_name

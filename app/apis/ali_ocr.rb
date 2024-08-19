@@ -15,7 +15,7 @@ class AliOcr
     )
   end
 
-  def ocr(class_id: 223, url: 'https://test.work.design/shurui2.jpg')
+  def ocr_223(url, class_id: 223)
     body = {
       action: 'PredictClassifierModel'
     }
@@ -32,6 +32,29 @@ class AliOcr
     r.dig('Data', 'data').map do |i|
       [i['fieldName'], i['fieldWordRaw']]
     end.to_h
+  end
+
+  def ocr_233(file, class_id: 233)
+    body = {
+      action: 'PredictClassifierModel'
+    }
+    body.merge! opts: {
+      method: 'POST',
+      timeout: 15000
+    }
+    body.merge! params: {
+      ClassifierId: class_id,
+      Body: file,
+      BinaryToText: true
+    }
+
+    r = client.request(**body)
+
+    if r['Data'].key?('data')
+      [r['Data']['data']]
+    else
+      r['Data']['tablesInfo'][0]['rowsInfo'].map { |row| row.map(&->(i){ [i['fieldName'], i['fieldWord']] }).to_h }
+    end
   end
 
 
