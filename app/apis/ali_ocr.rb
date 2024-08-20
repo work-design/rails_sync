@@ -15,7 +15,7 @@ class AliOcr
     )
   end
 
-  def ocr_223(url, class_id: 223)
+  def ocr_223(file, class_id: 223)
     body = {
       action: 'PredictClassifierModel'
     }
@@ -25,7 +25,8 @@ class AliOcr
     }
     body.merge! params: {
       ClassifierId: class_id,
-      Content: url
+      Body: file,
+      BinaryToText: true
     }
 
     r = client.request(**body)
