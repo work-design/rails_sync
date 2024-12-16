@@ -9,11 +9,6 @@ module Sync
       @apps = App.default_where(q_params).order(id: :desc).page(params[:page])
     end
 
-    def create
-      @app = App.find_or_initialize_by(appid: app_params[:appid])
-      @app.assign_attributes app_params
-    end
-
     private
     def set_app
       @app = App.find(params[:id])
