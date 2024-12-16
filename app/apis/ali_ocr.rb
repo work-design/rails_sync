@@ -35,6 +35,26 @@ class AliOcr
     end
   end
 
+  def ocr_class(file, class_id:)
+    body = {
+      action: 'PredictClassifierModel'
+    }
+    body.merge! opts: {
+      method: 'POST',
+      timeout: 15000
+    }
+    body.merge! params: {
+      ClassifierId: class_id,
+      Body: file,
+      BinaryToText: true
+    }
+
+    r = client.request(**body)
+    r.dig('Data', 'data').each_with_object({}) do |i, h|
+      h.merge! i['fieldName'] => i['fieldWordRaw']
+    end
+  end
+
   def ocr_223(file, class_id: 223)
     body = {
       action: 'PredictClassifierModel'
