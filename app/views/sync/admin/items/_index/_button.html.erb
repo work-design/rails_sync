@@ -1,6 +1,4 @@
-<div data-switch-target="src" class="buttons are-small mb-0">
-  <%= button_to({ action: 'sync', **request.query_parameters.except(:id) }, class: 'button is-link') do %>
-    <i class="fa-solid fa-plus"></i>
-    <span class="pl-1"><%= t('.sync.title') %></span>
-  <% end %>
-</div>
+<%= button_to({ action: 'sync', **request.query_parameters.except(:id) }, class: 'button is-link') do %>
+  <i class="fa-solid fa-plus"></i>
+  <span class="pl-1"><%= t('.sync.title') %></span>
+<% end %>
