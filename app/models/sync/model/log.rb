@@ -5,7 +5,7 @@ module Sync
 
     included do
       attribute :exception, :string
-      attribute :exception_backtrace, :string, array: true, default: []
+      attribute :exception_backtrace, :json, default: []
 
       belongs_to :item, counter_cache: true
       belongs_to :related, polymorphic: true, optional: true
