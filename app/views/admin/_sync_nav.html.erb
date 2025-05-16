@@ -1,14 +1,9 @@
-<div data-controller="menu empty" class="menu ex-accordion is-active">
-  <div class="menu-label">
-    <div>
-      <i class="fa-solid fa-fw fa-sitemap"></i>
-      <span><%= t('sync.admin.title') %></span>
-    </div>
-    <%= link_to({ controller: 'sync/admin/home' }, aria: { label: '设置' }) do %>
-      <i class="fa-solid fa-cog"></i>
-    <% end %>
-  </div>
-  <div class="menu-list" data-empty-target="content">
-    <%= link_to t('sync.admin.apps.index.title'), { controller: 'sync/admin/apps' }, data: { turbo_frame: 'body', action: 'menu#enter' }, class: active_helper(controllers: ['apps'], active: 'is-active') %>
+<div class="menu-list">
+  <%= link_to({ controller: 'sync/admin/home' }, text: true, data: { turbo_frame: 'body', action: 'menu#enter' }, class: 'menu-item') do %>
+    <i class="fa-solid fa-fw fa-sitemap"></i>
+    <strong><%= t('sync.admin.title') %></strong>
+  <% end %>
+  <div class="pl-4">
+    <%= link_to t('sync.admin.apps.index.title'), { controller: 'sync/admin/apps' }, data: { turbo_frame: 'body', action: 'menu#enter' }, class: active_helper(controllers: ['apps'], item: 'menu-item', active: 'menu-item is-active') %>
   </div>
 </div>
